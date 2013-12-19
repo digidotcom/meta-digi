@@ -6,49 +6,49 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/ISC;md5=f3b90e78ea0cffb20bf5cca
 
 inherit module
 
-PR = "r0"
+PR = "r1"
+
+# 'modprobe' from kmod package is needed to load atheros driver. The one
+# from busybox does not support '--ignore-install' option.
+RDEPENDS_${PN} = "kmod"
 
 SRCREV_external = "9d595329e4e22c8f175fee1df908bbd4697483e4"
 SRCREV_internal = "15bae2c4e330ea6d9289217d3c38ebf63aa8ff15"
 SRCREV = "${@base_conditional('DIGI_INTERNAL_GIT', '1' , '${SRCREV_internal}', '${SRCREV_external}', d)}"
 
 SRC_URI_external = "${DIGI_GITHUB_GIT}/atheros.git;protocol=git"
-SRC_URI_internal = "${DIGI_LOG_GIT}linux-modules/atheros.git;protocol=git"
-SRC_URI = "${@base_conditional('DIGI_INTERNAL_GIT', '1' , '${SRC_URI_internal}', '${SRC_URI_external}', d)}"
+SRC_URI_internal = "${DIGI_GIT}linux-modules/atheros.git;protocol=git"
+SRC_URI  = "${@base_conditional('DIGI_INTERNAL_GIT', '1' , '${SRC_URI_internal}', '${SRC_URI_external}', d)}"
 SRC_URI += " \
-	file://atheros \
-	file://atheros.conf \
-	file://Makefile \
-	"
+    file://atheros \
+    file://Makefile \
+    ${@base_conditional('IS_KERNEL_2X', '1' , '', 'file://0001-atheros-convert-NLA_PUT-macros.patch', d)} \
+    ${@base_conditional('IS_KERNEL_2X', '1' , '', 'file://0002-atheros-update-renamed-struct-members.patch', d)} \
+"
 
 S = "${WORKDIR}/git"
 
 EXTRA_OEMAKE = "DEL_PLATFORM=${MACHINE} KLIB_BUILD=${STAGING_KERNEL_DIR}"
 
 do_configure_prepend() {
-	cp ${WORKDIR}/Makefile ${S}/Makefile
+	cp ${WORKDIR}/Makefile ${S}/
 }
 
 do_install_append() {
 	install -d ${D}${sysconfdir}/network/if-pre-up.d
 	install -m 0755 ${WORKDIR}/atheros ${D}${sysconfdir}/network/if-pre-up.d/
 	install -d ${D}${sysconfdir}/modprobe.d
-	install -m 0644 ${WORKDIR}/atheros.conf ${D}${sysconfdir}/modprobe.d/
+	cat >> ${D}${sysconfdir}/modprobe.d/atheros.conf <<-_EOF_
+		install ath6kl_sdio true
+		options ath6kl_sdio ath6kl_p2p=1 softmac_enable=1
+	_EOF_
 }
 
 FILES_${PN} += " \
-	/lib/firmware/ath6k/AR6003/hw2.1.1/athtcmd_ram.bin \
-	/lib/firmware/ath6k/AR6003/hw2.1.1/athwlan.bin \
-	/lib/firmware/ath6k/AR6003/hw2.1.1/Digi_6203-6233-US.bin \
-	/lib/firmware/ath6k/AR6003/hw2.1.1/Digi_6203-6233-World.bin \
-	/lib/firmware/ath6k/AR6003/hw2.1.1/fw-4.bin \
-	/lib/firmware/ath6k/AR6003/hw2.1.1/nullTestFlow.bin \
-	/lib/firmware/ath6k/AR6003/hw2.1.1/utf.bin \
-	"
-FILES_${PN}_append_cpx2 = " \
-	/lib/firmware/ath6k/AR6003/hw2.1.1/calData_AR6103_Digi_X2e_B.bin \
-	/lib/firmware/ath6k/AR6003/hw2.1.1/calData_AR6103_Digi_X2e_B_world.bin \
-	"
+    ${base_libdir}/firmware/ \
+    ${sysconfdir}/modprobe.d/ \
+    ${sysconfdir}/network/ \
+"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-COMPATIBLE_MACHINE = "(ccardimx28js|cpx2)"
+COMPATIBLE_MACHINE = "(mxs)"

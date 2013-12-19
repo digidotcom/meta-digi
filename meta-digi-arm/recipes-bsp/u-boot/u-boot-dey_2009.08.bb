@@ -2,7 +2,7 @@
 
 DESCRIPTION = "Bootloader for Digi platforms"
 require recipes-bsp/u-boot/u-boot.inc
-include u-boot-dey-rev.inc
+include u-boot-dey-rev_${PV}.inc
 
 PROVIDES += "u-boot"
 
@@ -13,10 +13,13 @@ PR = "r0"
 
 S = "${WORKDIR}/git"
 
+UBOOT_BSTR_mxs   = "-ivt"
+UBOOT_SUFFIX_mxs = "sb"
+
 DEPENDS_mxs += "elftosb-native imx-bootlets-dey"
 
 EXTRA_OEMAKE += 'HOSTSTRIP=true'
 EXTRA_OEMAKE_append_mxs = ' BOOTLETS_DIR=${STAGING_DIR_TARGET}/boot'
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-COMPATIBLE_MACHINE = "(ccardimx28js|ccimx51js|ccimx53js|cpx2|wr21)"
+COMPATIBLE_MACHINE = "(mxs|mx5)"

@@ -11,15 +11,13 @@ LICENSE = "MIT"
 
 include dey-image-minimal.bb
 
-DISTRO_FEATURES += "pulseaudio"
 WEB = "web-webkit"
 
 SOC_IMAGE_INSTALL = ""
 SOC_IMAGE_INSTALL_mx5 = "amd-gpu-x11-bin-mx51"
 
 IMAGE_INSTALL += " \
-	${SOC_IMAGE_INSTALL} \
-	pointercal-xinput \
-    "
-
-export IMAGE_BASENAME = "dey-image-graphical"
+    ${SOC_IMAGE_INSTALL} \
+    owl-video \
+    pointercal-xinput \
+"

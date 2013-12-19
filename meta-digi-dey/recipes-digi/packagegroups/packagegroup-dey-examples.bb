@@ -7,12 +7,14 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/LICENSE;md5=3f40d7994397109285ec7b81fdeb3
 
 PR = "r0"
 
+DEPENDS = "virtual/kernel"
+
 inherit packagegroup
 
 RDEPENDS_${PN} = "\
-	dey-examples-adc \
+	${@base_conditional('IS_KERNEL_2X', '1' , 'dey-examples-adc', '', d)} \
 	${@base_contains("MACHINE_FEATURES", "alsa", "dey-examples-alsa", "", d)} \
-	dey-examples-gpio \
+	${@base_conditional('IS_KERNEL_2X', '1' , 'dey-examples-gpio', '', d)} \
 	dey-examples-gpio-sysfs \
 	${@base_contains("MACHINE_FEATURES", "rtc", "dey-examples-rtc", "", d)} \
 	dey-examples-spidev \
@@ -34,11 +36,11 @@ RDEPENDS_${PN}_append_mx5 = "\
 	dey-examples-v4l2 \
 "
 
-RDEPENDS_${PN}_append_ccimx51js_mx5 = "\
+RDEPENDS_${PN}_append_ccimx51js = "\
 	dey-examples-battery \
 "
 
-RDEPENDS_${PN}_append_ccimx53js_mx5 = "\
+RDEPENDS_${PN}_append_ccimx53js = "\
 	dey-examples-can \
 "
 

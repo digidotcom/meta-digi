@@ -6,7 +6,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/LICENSE;md5=3f40d7994397109285ec7b81fdeb3b58"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 DEPENDS = "virtual/kernel"
-ALLOW_EMPTY = "1"
+ALLOW_EMPTY_${PN} = "1"
 PR = "r0"
 
 inherit packagegroup
@@ -24,19 +24,23 @@ VIRTUAL-RUNTIME_init_manager ?= "sysvinit"
 VIRTUAL-RUNTIME_initscripts ?= "initscripts"
 VIRTUAL-RUNTIME_keymaps ?= "keymaps"
 
-# Set device manager depending on X11 feature
+# Set virtual runtimes depending on X11 feature
 VIRTUAL-RUNTIME_dev_manager ?= "${@base_contains('DISTRO_FEATURES', 'x11', 'udev', 'busybox-mdev', d)}"
+VIRTUAL-RUNTIME_touchscreen ?= "${@base_contains('DISTRO_FEATURES', 'x11', '', 'tslib-calibrate tslib-tests', d)}"
 
 RDEPENDS_${PN} = "\
     base-files \
     base-passwd \
     busybox \
+    busybox-static-nodes \
     ${@base_contains("MACHINE_FEATURES", "rtc", "busybox-hwclock", "", d)} \
     ${@base_contains("MACHINE_FEATURES", "keyboard", "${VIRTUAL-RUNTIME_keymaps}", "", d)} \
-    ${@base_contains("MACHINE_FEATURES", "touchscreen", "tslib tslib-calibrate tslib-tests", "",d)} \
+    ${@base_contains("MACHINE_FEATURES", "touchscreen", "${VIRTUAL-RUNTIME_touchscreen}", "",d)} \
     modutils-initscripts \
+    mtd-utils-ubifs \
     netbase \
     nvram \
+    init-ifupdown \
     ${VIRTUAL-RUNTIME_dev_manager} \
     ${VIRTUAL-RUNTIME_init_manager} \
     ${VIRTUAL-RUNTIME_initscripts} \
@@ -46,8 +50,10 @@ RDEPENDS_${PN} = "\
     ubootenv \
     update-flash \
     usbutils \
-    ${@base_contains("MACHINE_FEATURES", "usbgadget", "kernel-module-g-ether kernel-module-g-file-storage kernel-module-g-serial", "",d)} \
+    busybox-acpid \
     ${MACHINE_ESSENTIAL_EXTRA_RDEPENDS}"
 
 RRECOMMENDS_${PN} = "\
-    ${MACHINE_ESSENTIAL_EXTRA_RRECOMMENDS}"
+    ${MACHINE_ESSENTIAL_EXTRA_RRECOMMENDS} \
+    ${MACHINE_EXTRA_RRECOMMENDS} \
+"

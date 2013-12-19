@@ -1,22 +1,24 @@
 # Copyright (C) 2012 Digi International
 
 include linux-dey.inc
-include linux-dey-rev.inc
 
 PR = "${DISTRO}.${INC_PR}.0"
 
+SRCREV_external = "60a722916a82fb954add43cf53c5684d63550ca6"
+SRCREV_internal = "a6af90cf1d79359802e7f7d5f395d3800eb638b7"
+SRCREV = "${@base_conditional('DIGI_INTERNAL_GIT', '1' , '${SRCREV_internal}', '${SRCREV_external}', d)}"
+
 LOCALVERSION_mx5 = "mx5"
 LOCALVERSION_mxs = "mxs"
-LOCALVERSION_cpx2_mxs = "mxs+gateways"
 
-SRC_URI += " \
+SRC_URI_external = "${DIGI_GITHUB_GIT}/yocto-linux.git;protocol=git"
+SRC_URI_internal = "${DIGI_GIT}linux-2.6.git;protocol=git"
+SRC_URI = " \
+    ${@base_conditional('DIGI_INTERNAL_GIT', '1' , '${SRC_URI_internal}', '${SRC_URI_external}', d)} \
     file://defconfig \
     ${KERNEL_CFG_FRAGS} \
 "
-SRC_URI_append_cpx2 = " \
-    file://cpx2-Remove-incorrect-pin-configurations.patch \
-    file://cpx2e-Setup-mmc0-for-the-wireless-interface.patch \
-"
+
 S = "${WORKDIR}/git"
 
 KERNEL_CFG_FRAGS ?= ""
