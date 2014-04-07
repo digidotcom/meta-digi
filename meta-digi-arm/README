@@ -1,0 +1,31 @@
+OpenEmbedded/Yocto BSP layer for Digi's ConnectCore platforms
+=============================================================
+
+This layer provides support for Digi's ConnnecCore platforms for use
+with OpenEmbedded and/or Yocto.
+
+This layer depends on:
+
+git://git.yoctoproject.org/poky.git
+git://git.openembedded.org/meta-openembedded.git
+git://git.yoctoproject.org/meta-fsl-arm.git
+
+Digi's license agreements
+-------------------------
+
+All software is covered by Digi's general EULA and Digi's Open Source
+EULA. To have the right to use the software in your images you need to
+read and accept both EULAs at the DIGI_EULA and DIGI_OPEN_EULA files.
+
+Freescale's license agreeements
+-------------------------------
+
+Some platforms depends on libraries and packages that are covered by
+Freescale's MMK EULA. To have the right to use those binaries in your
+images you need to read and accept the EULA at the FSL_MMK_EULA file.
+
+Support
+-------
+
+This layer is provided 'as is' with no guarantee. However, some support
+may be available from support@digi.com
