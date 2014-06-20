@@ -81,7 +81,18 @@ copy_images() {
 # builds.
 #
 purge_sstate() {
-	bitbake -c cleansstate packagegroup-dey-examples
+	local PURGE_PKGS=" \
+		packagegroup-dey-audio \
+		packagegroup-dey-bluetooth \
+		packagegroup-dey-core \
+		packagegroup-dey-debug \
+		packagegroup-dey-examples \
+		packagegroup-dey-gstreamer \
+		packagegroup-dey-network \
+		packagegroup-dey-qt \
+		packagegroup-dey-wireless \
+	"
+	bitbake -k -c cleansstate ${PURGE_PKGS} >/dev/null 2>&1 || true
 }
 
 # Sanity check (Jenkins environment)
@@ -105,6 +116,7 @@ done<<-_EOF_
 	ccimx51js       128 128a 128agv agv eagv w w128a w128agv wagv weagv
 	ccimx53js       - 128 4k e e4k w w128 we
 	ccimx6adpt      - w wb
+	ccimx6sbc       - w wb
 _EOF_
 
 # Support Linux-3.x and U-Boot 2013.x
@@ -115,6 +127,7 @@ done<<-_EOF_
 	ccimx51js       n
 	ccimx53js       n
 	ccimx6adpt      n
+	ccimx6sbc       n
 _EOF_
 
 YOCTO_IMGS_DIR="${WORKSPACE}/images"

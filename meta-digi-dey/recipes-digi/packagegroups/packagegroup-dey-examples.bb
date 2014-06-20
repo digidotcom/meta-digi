@@ -44,9 +44,11 @@ RDEPENDS_${PN}_append_ccimx53js = "\
 	dey-examples-can \
 "
 
-RDEPENDS_${PN}_append_ccimx6adpt = "\
+RDEPENDS_${PN}_append_mx6 = "\
 	dey-examples-can \
+	${@base_contains("MACHINE_FEATURES", "accel-graphics", "dey-examples-opengles", "", d)} \
+	dey-examples-v4l2 \
 "
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-COMPATIBLE_MACHINE = "(ccardimx28js|ccimx51js|ccimx53js|ccimx6adpt)"
+COMPATIBLE_MACHINE = "(ccardimx28js|ccimx51js|ccimx53js|ccimx6adpt|ccimx6sbc)"

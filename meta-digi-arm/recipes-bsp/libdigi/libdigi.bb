@@ -7,21 +7,22 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425
 
 PR = "${DISTRO}.r0"
 
-SRC_URI = "file://cmdopt.c \
-           file://cmdopt.h \
-           file://crc32.c \
-           file://crc32.h \
-           file://digi-platforms.h \
-           file://log.c \
-           file://log.h \
-           file://mem.c \
-           file://mem.h \
-           file://misc_helper.h \
-           file://platform.c \
-           "
+SRC_URI = " \
+    file://cmdopt.c \
+    file://cmdopt.h \
+    file://crc32.c \
+    file://crc32.h \
+    file://digi-platforms.h \
+    file://log.c \
+    file://log.h \
+    file://mem.c \
+    file://mem.h \
+    file://misc_helper.h \
+    file://platform.c \
+"
 
 S = "${WORKDIR}"
-           
+
 do_compile() {
 	${CC} -O2 -Wall -c -o log.o log.c
 	${CC} -O2 -Wall -c -o cmdopt.o cmdopt.c
@@ -32,11 +33,11 @@ do_compile() {
 }
 
 do_install() {
-	mkdir -p ${D}/usr/include/libdigi ${D}/usr/lib
-	install -m 0644 libdigi.a ${D}/usr/lib
-	install -m 0644 cmdopt.h crc32.h digi-platforms.h log.h mem.h misc_helper.h ${D}/usr/include/libdigi
+	mkdir -p ${D}${includedir}/libdigi ${D}${libdir}
+	install -m 0644 libdigi.a ${D}${libdir}
+	install -m 0644 cmdopt.h crc32.h digi-platforms.h log.h mem.h misc_helper.h ${D}${includedir}/libdigi
 }
 
-ALLOW_EMPTY_${PN} = "1"
+RDEPENDS_${PN}-dev = ""
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"

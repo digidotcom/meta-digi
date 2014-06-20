@@ -12,16 +12,12 @@ PR = "r1"
 # from busybox does not support '--ignore-install' option.
 RDEPENDS_${PN} = "kmod"
 
-SRCBRANCH_external = "master"
-SRCBRANCH_internal = "dey-1.6/maint"
-SRCBRANCH = "${@base_conditional('DIGI_INTERNAL_GIT', '1' , '${SRCBRANCH_internal}', '${SRCBRANCH_external}', d)}"
-
 SRCREV_external = "621b43aef3f4611500c461ef8940fa7990d55d9e"
 SRCREV_internal = "fdb797adf47514f5c94921fb20e64b4ecadb7a52"
 SRCREV = "${@base_conditional('DIGI_INTERNAL_GIT', '1' , '${SRCREV_internal}', '${SRCREV_external}', d)}"
 
-SRC_URI_external = "${DIGI_GITHUB_GIT}/atheros.git;protocol=git;branch=${SRCBRANCH}"
-SRC_URI_internal = "${DIGI_GIT}linux-modules/atheros.git;protocol=git;branch=${SRCBRANCH}"
+SRC_URI_external = "${DIGI_GITHUB_GIT}/atheros.git;protocol=git;nobranch=1"
+SRC_URI_internal = "${DIGI_GIT}linux-modules/atheros.git;protocol=git;nobranch=1"
 SRC_URI  = "${@base_conditional('DIGI_INTERNAL_GIT', '1' , '${SRC_URI_internal}', '${SRC_URI_external}', d)}"
 SRC_URI += " \
     file://atheros \
@@ -30,12 +26,19 @@ SRC_URI += " \
     ${@base_conditional('IS_KERNEL_2X', '1' , '', 'file://0002-atheros-update-renamed-struct-members.patch', d)} \
 "
 
+# MX6 wireless calibration file
+SRC_URI_append_mx6 = " file://Digi_6203-6233-US.bin"
+
 S = "${WORKDIR}/git"
 
 EXTRA_OEMAKE = "DEL_PLATFORM=${MACHINE} KLIB_BUILD=${STAGING_KERNEL_DIR}"
 
 do_configure_prepend() {
 	cp ${WORKDIR}/Makefile ${S}/
+}
+
+do_configure_prepend_mx6() {
+	cp ${WORKDIR}/Digi_6203-6233-US.bin ${S}/Firmware_Package/target/AR6003/hw2.1.1/
 }
 
 do_install_append() {
