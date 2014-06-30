@@ -12,10 +12,10 @@ SRCBRANCH_mx6 = "v3.10/dey-1.6/maint"
 
 SRCREV_external = ""
 SRCREV_external_mxs = "aea2fb1ac539599100014e2d61f22f4aad1e057b"
-SRCREV_external_mx6 = "959897b281ebf4f6ae2e1031f6c37927c647db02"
+SRCREV_external_mx6 = "d5fa698e483f7da0234218e5ac7f054a6f703ea2"
 SRCREV_internal = ""
 SRCREV_internal_mxs = "60df349eeb051a0dcb4eaa39206969d23d612b9d"
-SRCREV_internal_mx6 = "ee7f35c71b4749b4b2259ab3bfd3f7136556a45b"
+SRCREV_internal_mx6 = "70069f75e5a121a1a5ad2666eb159ad1b05d27e3"
 SRCREV = "${@base_conditional('DIGI_INTERNAL_GIT', '1' , '${SRCREV_internal}', '${SRCREV_external}', d)}"
 
 # Kernel configuration fragments
