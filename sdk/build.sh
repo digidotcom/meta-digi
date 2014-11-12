@@ -14,6 +14,7 @@
 #  !Description: Yocto autobuild script from Jenkins.
 #
 #  Parameters set by Jenkins:
+#     DY_BUILD_TCHAIN:   Build toolchains for DEY images
 #     DY_BUILD_VARIANTS: Build all platform variants
 #     DY_DISTRO:         Distribution name (the default is 'dey')
 #     DY_PLATFORMS:      Platforms to build
@@ -37,10 +38,21 @@ SOURCE_MIRROR_URL ?= \"http://build-linux.digi.com/yocto/downloads/\"
 INHERIT += \"own-mirrors\"
 "
 
-KERNEL_3X_CFG="
-# Build Linux 3.10 and U-Boot 2013.01
-PREFERRED_VERSION_linux-dey = \"3.10\"
-PREFERRED_VERSION_u-boot-dey = \"2013.01\"
+# Alternative config for ccardimx28js
+KERNEL_2X_CFG="
+# Build Linux 2.6.35.14 and U-Boot 2009.08
+PREFERRED_VERSION_linux-dey = \"2.6.35.14\"
+PREFERRED_VERSION_u-boot-dey = \"2009.08\"
+"
+
+RM_WORK_CFG="
+INHERIT += \"rm_work\"
+# Exclude rm_work for some key packages (for debugging purposes)
+RM_WORK_EXCLUDE += \"dey-image-graphical dey-image-minimal linux-dey u-boot-dey\"
+"
+
+X11_REMOVAL_CFG="
+DISTRO_FEATURES_remove = \"x11\"
 "
 
 REPO="$(which repo)"
@@ -63,6 +75,9 @@ copy_images() {
 		cp -r tmp/deploy/* ${1}/
 	else
 		cp -r tmp/deploy/images ${1}/
+		if [ "${DY_BUILD_TCHAIN}" = "true" ]; then
+			cp -r tmp/deploy/sdk ${1}/
+		fi
 	fi
 	# Jenkins artifact archiver does not copy symlinks, so remove them
 	# beforehand to avoid ending up with several duplicates of the same
@@ -107,6 +122,9 @@ purge_sstate() {
 [ -z "${DY_TARGET}" ] && DY_TARGET="dey-image-minimal"
 [ -z "${DY_DISTRO}" ] && DY_DISTRO="dey"
 
+# If DY_BUILD_TCHAIN is unset, set it for release jobs
+[ -z "${DY_BUILD_TCHAIN}" ] && [[ "${JOB_NAME}" =~ dey-.*-release ]] && DY_BUILD_TCHAIN="true"
+
 # Per-platform variants
 while read _pl _var; do
 	[ "${DY_BUILD_VARIANTS}" = "false" ] && _var="DONTBUILDVARIANTS"
@@ -119,7 +137,7 @@ done<<-_EOF_
 	ccimx6sbc       - w wb
 _EOF_
 
-# Support Linux-3.x and U-Boot 2013.x
+# Build alternative linux and u-boot
 while read _pl _ker; do
 	eval "${_pl}_ker=\"${_ker}\""
 done<<-_EOF_
@@ -163,8 +181,8 @@ fi
 rm -rf ${YOCTO_IMGS_DIR} ${YOCTO_PROJ_DIR}
 for platform in ${DY_PLATFORMS}; do
 	eval platform_variants="\${${platform}_var}"
-	eval platform_kernel3x="\${${platform}_ker%n}"
-	for kernel_ver in "" ${platform_kernel3x:+-3x}; do
+	eval platform_kernel2x="\${${platform}_ker%n}"
+	for kernel_ver in "" ${platform_kernel2x:+-2x}; do
 		for variant in ${platform_variants}; do
 			_this_prj_dir="${YOCTO_PROJ_DIR}/${platform}${kernel_ver}"
 			_this_img_dir="${YOCTO_IMGS_DIR}/${platform}${kernel_ver}"
@@ -195,12 +213,23 @@ for platform in ${DY_PLATFORMS}; do
 						printf "${DIGI_PREMIRROR_CFG}" >> conf/local.conf
 					fi
 					if [ -n "${kernel_ver}" ]; then
-						printf "${KERNEL_3X_CFG}" >> conf/local.conf
+						printf "${KERNEL_2X_CFG}" >> conf/local.conf
 					fi
-					[ "${DY_RM_WORK}" = "true" ] && printf "\nINHERIT += \"rm_work\"\n" >> conf/local.conf
+					if [ "${DY_RM_WORK}" = "true" ]; then
+						printf "${RM_WORK_CFG}" >> conf/local.conf
+					fi
+					# Remove 'x11' distro feature if building minimal images
+					if echo "${DY_TARGET}" | grep -qs "dey-image-minimal"; then
+						printf "${X11_REMOVAL_CFG}" >> conf/local.conf
+					fi
 					for target in ${DY_TARGET}; do
-						printf "\n[INFO] Building the $target target.\n"
+						printf "\n[INFO] Building the ${target} target.\n"
 						time bitbake ${target}
+						# Build the toolchain for DEY images
+						if [ "${DY_BUILD_TCHAIN}" = "true" ] && echo "${target}" | grep -qs '^dey-image-[^-]\+$'; then
+							printf "\n[INFO] Building the toolchain for ${target}.\n"
+							time bitbake -c populate_sdk ${target}
+						fi
 					done
 					purge_sstate
 				)

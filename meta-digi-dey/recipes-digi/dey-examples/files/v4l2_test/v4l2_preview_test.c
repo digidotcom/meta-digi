@@ -99,6 +99,9 @@ static void *v4l2_camera_thread(void *pargs)
 	/* Restore default cropping - no zoom */
 	v4l2_reset_cropping_rectangle(args->fd_in);
 
+	/* Reset rotation to ROTATE_NONE */
+	v4l2_set_rotate(args->fd_in, 0);
+
 	/* Set size in overlay */
 	v4l2_set_format_overlay(args->fd_in,
 				args->options.top, args->options.left,
@@ -230,7 +233,7 @@ static int cmd_area_zoom(int fd)
 	struct v4l2_rect zoom_rectangle;
 	int ret = -1;
 
-	printf("Enter rectangle's values (top, left, width, height): ");
+	printf("Enter rectangle's values (top, left, width [>=8], height [>=8]): ");
 	if ((scanf("%d,%d,%d,%d", &zoom_rectangle.top, &zoom_rectangle.left,
 		   &zoom_rectangle.width, &zoom_rectangle.height)) != 4 || should_stop) {
 		printf("Enter four parameters\n");

@@ -601,9 +601,9 @@ int v4l2_crop_input(int fd, struct v4l2_rect *crop_rectangle)
 	if (retval < 0)
 		return retval;
 
-	if (crop_rectangle->left + crop_rectangle->width > crop_bounds.left +
-	    crop_bounds.width || crop_rectangle->top +
-	    crop_rectangle->height > crop_bounds.top + crop_bounds.height) {
+	if (crop_rectangle->left + crop_rectangle->width > crop_bounds.left + crop_bounds.width ||
+	    crop_rectangle->top + crop_rectangle->height > crop_bounds.top + crop_bounds.height ||
+	    crop_rectangle->width < 8 || crop_rectangle->height < 8) {
 		log("Invalid input\n");
 		return -EINVAL;
 	}
@@ -643,10 +643,13 @@ int v4l2_area_zoom(int fd, struct v4l2_rect *crop_rectangle)
 			       crop_rectangle->top, crop_rectangle->left,
 			       crop_rectangle->width, crop_rectangle->height);
 			printf("\nValid rectangles are those which:\n"
-			       "Top + Height < Bound_Top + Bound_Height\n"
-			       "and\n" "Left + Width < Bound_Left + Bound_Width\n\n");
+			       "  Height >= 8\n"
+			       "  Width >= 8\n"
+			       "  Top + Height < Bound_Top + Bound_Height\n"
+			       "  Left + Width < Bound_Left + Bound_Width\n\n");
+		} else {
+			return retval;
 		}
-		return retval;
 	}
 
 	retval = v4l2_overlay_control(fd, 1);
@@ -711,9 +714,14 @@ int v4l2_get_control(int fd, int id, int *value)
 	return retval;
 }
 
-int v4l2_rotate(int fd, int rotate)
+int v4l2_set_rotate(int fd, int rotate)
 {
 	/* This is not supported by V4L2, it's done by the IPUv3 driver */
+	return v4l2_set_control(fd, V4L2_CID_MXC_VF_ROT, rotate);
+}
+
+int v4l2_rotate(int fd, int rotate)
+{
 	int retval;
 
 	/* Stop overlay */
@@ -722,15 +730,12 @@ int v4l2_rotate(int fd, int rotate)
 		return retval;
 
 	/* Set new rotation value */
-	retval = v4l2_set_control(fd, V4L2_CID_MXC_VF_ROT, rotate);
-	if (retval < 0)
-		return retval;
-	/* Start overlay */
-	retval = v4l2_overlay_control(fd, 1);
-	if (retval < 1)
+	retval = v4l2_set_rotate(fd, rotate);
+	if (retval < 0 && errno != EINVAL)
 		return retval;
 
-	return retval;
+	/* Start overlay */
+	return v4l2_overlay_control(fd, 1);
 }
 
 int v4l2_set_brightness(int fd, int percentage)

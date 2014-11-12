@@ -1,10 +1,10 @@
 # Copyright (C) 2013 Digi International
 
 # Internal repo branch
-SRCBRANCH = "master"
+SRCBRANCH = "v2009.08/dub-1.6/maint"
 
-SRCREV_external = "2f3f9f800786069b43feaec286cb134d86f30793"
-SRCREV_internal = "80a0de8cc2bdbe0d2762e6da6defe89210f6db9c"
+SRCREV_external = "040f2fd44cc17ee11258463c576daee2c33edecf"
+SRCREV_internal = "890524e864e638afe75c5eb95da57a330009e3f2"
 SRCREV = "${@base_conditional('DIGI_INTERNAL_GIT', '1' , '${SRCREV_internal}', '${SRCREV_external}', d)}"
 
 SRC_URI_external = "${DIGI_GITHUB_GIT}/yocto-uboot.git;protocol=git;nobranch=1"
