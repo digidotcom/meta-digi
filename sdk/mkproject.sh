@@ -28,7 +28,7 @@ MKP_NONE="\033[0m"
 MKP_CONFIGPATH="${MKP_SCRIPTPATH}/sources/meta-digi/sdk/config"
 
 # Blacklist platforms (not officially supported in a DEY release)
-MKP_BLACKLIST_PLATFORMS="ccimx51js ccimx53js ccimx6adpt"
+MKP_BLACKLIST_PLATFORMS="ccimx51js ccimx53js"
 
 MKP_SETUP_ENVIRONMENT='#!/bin/bash
 
