@@ -12,10 +12,10 @@ SRCBRANCH_mx6 = "v3.10/dey-1.6/maint"
 
 SRCREV_external = ""
 SRCREV_external_mxs = "a79b2166007d1b1b0d1e56ead4035c6869bafef3"
-SRCREV_external_mx6 = "b1b382849020472be2cc09f275552c48419210e1"
+SRCREV_external_mx6 = "de6d1ae6ec82dc26812a3e3fd9244264195b5e18"
 SRCREV_internal = ""
 SRCREV_internal_mxs = "d35161d450fc2be555eeafd200e7850828e2049e"
-SRCREV_internal_mx6 = "7c1383f111b51f4b4209517d09b0e5a6eb1a42bd"
+SRCREV_internal_mx6 = "5fe203cf9ad0b024f0414042da3367311f61e490"
 SRCREV = "${@base_conditional('DIGI_INTERNAL_GIT', '1' , '${SRCREV_internal}', '${SRCREV_external}', d)}"
 
 # Kernel configuration fragments
@@ -34,6 +34,18 @@ config_dts() {
 
 do_update_dts() {
 	:
+}
+
+do_update_dts_ccimx6() {
+	# Rename variant device tree to the standard name (used in u-boot)
+	for DTB in ${KERNEL_DEVICETREE}; do
+		DTS="${DTB%b}s"
+		DTS_VARIANT="$(echo ${DTS} | sed "s/${MACHINE}/${MACHINE}${DTB_VARIANT_STR}/g")"
+		[ "${DTS_VARIANT}" = "${DTS}" ] && continue
+		if [ -e "${S}/arch/arm/boot/dts/${DTS_VARIANT}" ]; then
+			cp -f "${S}/arch/arm/boot/dts/${DTS_VARIANT}" "${S}/arch/arm/boot/dts/${DTS}"
+		fi
+	done
 }
 
 do_update_dts_mxs() {
