@@ -8,8 +8,8 @@ include linux-dey.inc
 
 PR = "${DISTRO}.${INC_PR}.0"
 
-SRCREV_external = "332ec0558cab98363819c03b7564a086747b796b"
-SRCREV_internal = "43ee95fb0a87645076f789f3c20dfe6bace89d2f"
+SRCREV_external = "cf5655b4a37e4b0bfd530081f54122a29d98014a"
+SRCREV_internal = "313db2db8d566caad3c9c89145712ebee1a47340"
 SRCREV = "${@base_conditional('DIGI_INTERNAL_GIT', '1' , '${SRCREV_internal}', '${SRCREV_external}', d)}"
 
 LOCALVERSION_mxs = "mxs"

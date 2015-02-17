@@ -1,8 +1,8 @@
-From: Javier Viguera <javier.viguera@digi.com>
-Date: Fri, 22 Nov 2013 16:57:32 +0100
+From: Alex Gonzalez <alex.gonzalez@digi.com>
+Date: Thu, 28 Aug 2014 11:45:53 +0200
 Subject: [PATCH] gst-fsl-plugin: update to DEL revision
 
-Signed-off-by: Javier Viguera <javier.viguera@digi.com>
+Signed-off-by: Alex Gonzalez <alex.gonzalez@digi.com>
 ---
  Makefile.am                                       |   1 +
  configure                                         | 387 ++++++++++++++--------
@@ -18,15 +18,13 @@ Signed-off-by: Javier Viguera <javier.viguera@digi.com>
  src/parser/aiur/src/aiurdemux.c                   |   2 +-
  src/video/mpeg4asp_dec/src/mfw_gst_mpeg4asp_dec.c |   5 +-
  src/video/vpu_dec.full/src/mfw_gst_vpu_decoder.c  |  12 +-
- tools/gplay/gplay_header.tgz                      | Bin 8807 -> 0 bytes
  tools/gplay/mfw_gplay.c                           |  11 +-
  tools/gplay/mfw_gplay_core.c                      |   8 +-
- tools/gplay/mfw_gplay_core.h                      |   4 +-
- 18 files changed, 514 insertions(+), 430 deletions(-)
- delete mode 100644 tools/gplay/gplay_header.tgz
+ tools/gplay/mfw_gplay_core.h                      |   2 +-
+ 17 files changed, 513 insertions(+), 429 deletions(-)
 
 diff --git a/Makefile.am b/Makefile.am
-index be3d1d2..0f1c23c 100755
+index be3d1d2c7c48..0f1c23c0a8f3 100755
 --- a/Makefile.am
 +++ b/Makefile.am
 @@ -1,3 +1,4 @@
@@ -35,7 +33,7 @@ index be3d1d2..0f1c23c 100755
  LIBSDIRS =  \
             libs/sconf \
 diff --git a/configure b/configure
-index d29d19d..b4c9303 100755
+index d29d19d4705f..b4c9303b9b3e 100755
 --- a/configure
 +++ b/configure
 @@ -1,6 +1,8 @@
@@ -821,7 +819,7 @@ index d29d19d..b4c9303 100755
  s,@CFLAGS@,$CFLAGS,;t t
  s,@LDFLAGS@,$LDFLAGS,;t t
 diff --git a/configure.ac b/configure.ac
-index 1587668..341484d 100755
+index 158766838e57..341484d4c1c0 100755
 --- a/configure.ac
 +++ b/configure.ac
 @@ -1,4 +1,16 @@
@@ -866,7 +864,7 @@ index 1587668..341484d 100755
  
  
 diff --git a/libs/me/TimeStamp.c b/libs/me/TimeStamp.c
-index 30e7b35..536a94b 100755
+index 30e7b35b3f1c..536a94b9c3ae 100755
 --- a/libs/me/TimeStamp.c
 +++ b/libs/me/TimeStamp.c
 @@ -38,13 +38,34 @@
@@ -1209,7 +1207,7 @@ index 30e7b35..536a94b 100755
  }
  
 diff --git a/src/audio/aac_dec/src/mfw_gst_aacdec.c b/src/audio/aac_dec/src/mfw_gst_aacdec.c
-index 01d21d8..6e8a37b 100755
+index 01d21d8449b1..6e8a37bd62d1 100755
 --- a/src/audio/aac_dec/src/mfw_gst_aacdec.c
 +++ b/src/audio/aac_dec/src/mfw_gst_aacdec.c
 @@ -1521,6 +1521,11 @@ mfw_gst_aacdec_data (MFW_GST_AACDEC_INFO_T * aacdec_info, gint inbuffsize)
@@ -1337,7 +1335,7 @@ index 01d21d8..6e8a37b 100755
  
      App_bs_readinit ((gchar *) inbuffer, inbuffsize, aacdec_info);
 diff --git a/src/audio/aacplus_dec/src/mfw_gst_aacplusdec.c b/src/audio/aacplus_dec/src/mfw_gst_aacplusdec.c
-index 2180735..2d0304c 100755
+index 2180735bada8..2d0304c0523e 100755
 --- a/src/audio/aacplus_dec/src/mfw_gst_aacplusdec.c
 +++ b/src/audio/aacplus_dec/src/mfw_gst_aacplusdec.c
 @@ -1552,6 +1552,12 @@ mfw_gst_aacplusdec_data (MFW_GST_AACPLUSDEC_INFO_T * aacplusdec_info,
@@ -1443,7 +1441,7 @@ index 2180735..2d0304c 100755
                      gst_value_array_append_value (&chanpos, &pos);
                  }
 diff --git a/src/audio/mp3_dec/src/mfw_gst_mp3dec.c b/src/audio/mp3_dec/src/mfw_gst_mp3dec.c
-index dff345b..1787ec6 100755
+index dff345b53742..1787ec6952c5 100755
 --- a/src/audio/mp3_dec/src/mfw_gst_mp3dec.c
 +++ b/src/audio/mp3_dec/src/mfw_gst_mp3dec.c
 @@ -1,9 +1,4 @@
@@ -1643,7 +1641,7 @@ index dff345b..1787ec6 100755
  	GST_BUFFER_OFFSET(outbuffer) = 0;
  
 diff --git a/src/audio/mp3_dec/src/mfw_gst_mp3dec.h b/src/audio/mp3_dec/src/mfw_gst_mp3dec.h
-index c45b8b6..e25e7a0 100755
+index c45b8b68e6f3..e25e7a028f1c 100755
 --- a/src/audio/mp3_dec/src/mfw_gst_mp3dec.h
 +++ b/src/audio/mp3_dec/src/mfw_gst_mp3dec.h
 @@ -110,14 +110,9 @@ G_BEGIN_DECLS
@@ -1664,7 +1662,7 @@ index c45b8b6..e25e7a0 100755
  
  typedef struct _MfwGstMp3DecInfoClass {
 diff --git a/src/audio/vorbis_dec/src/mfw_gst_vorbisdec.c b/src/audio/vorbis_dec/src/mfw_gst_vorbisdec.c
-index 1fb883f..dba400a 100755
+index 1fb883f1e5aa..dba400a49909 100755
 --- a/src/audio/vorbis_dec/src/mfw_gst_vorbisdec.c
 +++ b/src/audio/vorbis_dec/src/mfw_gst_vorbisdec.c
 @@ -431,7 +431,7 @@ void mfw_gst_vorbisdec_set_caps_channel_pos(GstCaps *caps, gint channum)
@@ -1711,7 +1709,7 @@ index 1fb883f..dba400a 100755
          init_tsmanager(&vordec_info->tsMgr);
  
 diff --git a/src/misc/v4l_sink/src/mfw_gst_v4l_buffer.c b/src/misc/v4l_sink/src/mfw_gst_v4l_buffer.c
-index 5febe48..82230f5 100755
+index 5febe48663d4..82230f5a0b39 100755
 --- a/src/misc/v4l_sink/src/mfw_gst_v4l_buffer.c
 +++ b/src/misc/v4l_sink/src/mfw_gst_v4l_buffer.c
 @@ -280,6 +280,7 @@ MFWGstV4LSinkBuffer *mfw_gst_v4l2_new_swbuffer(MFW_GST_V4LSINK_INFO_T * v4l_info
@@ -1723,7 +1721,7 @@ index 5febe48..82230f5 100755
                              (v4l_info->height+v4l_info->cr_left_bypixel+v4l_info->cr_right_bypixel)*2;
  
 diff --git a/src/misc/v4l_sink/src/mfw_gst_v4lsink.c b/src/misc/v4l_sink/src/mfw_gst_v4lsink.c
-index db6da3a..c6a6b6c 100755
+index db6da3a0bb48..c6a6b6c99283 100755
 --- a/src/misc/v4l_sink/src/mfw_gst_v4lsink.c
 +++ b/src/misc/v4l_sink/src/mfw_gst_v4lsink.c
 @@ -1209,6 +1209,10 @@ mfw_gst_v4lsink_set_format (MFW_GST_V4LSINK_INFO_T * v4l_info, GstCaps * caps)
@@ -1754,7 +1752,7 @@ index db6da3a..c6a6b6c 100755
          GST_MAKE_FOURCC ('Y', 'U', 'Y', '2'),
          GST_MAKE_FOURCC ('N', 'V', '1', '2'),
 diff --git a/src/parser/aiur/src/aiurdemux.c b/src/parser/aiur/src/aiurdemux.c
-index e2567d9..10427a8 100755
+index e2567d936c39..10427a8b2668 100755
 --- a/src/parser/aiur/src/aiurdemux.c
 +++ b/src/parser/aiur/src/aiurdemux.c
 @@ -2418,7 +2418,7 @@ aiurdemux_parse_video (GstAiurDemux * demux, AiurDemuxStream * stream,
@@ -1767,7 +1765,7 @@ index e2567d9..10427a8 100755
        break;
      case VIDEO_MPEG4:
 diff --git a/src/video/mpeg4asp_dec/src/mfw_gst_mpeg4asp_dec.c b/src/video/mpeg4asp_dec/src/mfw_gst_mpeg4asp_dec.c
-index 1ae390c..8e3a591 100755
+index 1ae390cf1dea..8e3a5918d65d 100755
 --- a/src/video/mpeg4asp_dec/src/mfw_gst_mpeg4asp_dec.c
 +++ b/src/video/mpeg4asp_dec/src/mfw_gst_mpeg4asp_dec.c
 @@ -69,9 +69,6 @@
@@ -1788,7 +1786,7 @@ index 1ae390c..8e3a591 100755
 \ No newline at end of file
 +		  FSL_GST_MM_PLUGIN_PACKAGE_NAME, FSL_GST_MM_PLUGIN_PACKAGE_ORIG)
 diff --git a/src/video/vpu_dec.full/src/mfw_gst_vpu_decoder.c b/src/video/vpu_dec.full/src/mfw_gst_vpu_decoder.c
-index 44266d8..dc7ab44 100755
+index 44266d8126a1..dc7ab44ccdfb 100755
 --- a/src/video/vpu_dec.full/src/mfw_gst_vpu_decoder.c
 +++ b/src/video/vpu_dec.full/src/mfw_gst_vpu_decoder.c
 @@ -2664,7 +2664,7 @@ mfw_gst_vpudec_prep_gstbuf (MfwGstVPU_Dec * vpu_dec)
@@ -1831,187 +1829,8 @@ index 44266d8..dc7ab44 100755
  
        caps_list[i++] = "video/x-divx, %s, " "divxversion = (int)[3, 6];";
  
-diff --git a/tools/gplay/gplay_header.tgz b/tools/gplay/gplay_header.tgz
-deleted file mode 100644
-index 1ee46bb2e9fea9257f252f6ca477132c3a9d7d14..0000000000000000000000000000000000000000
-GIT binary patch
-literal 0
-HcmV?d00001
-
-literal 8807
-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
-
 diff --git a/tools/gplay/mfw_gplay.c b/tools/gplay/mfw_gplay.c
-index 0bcd78c..ee65100 100755
+index 0bcd78c11596..ee65100dc2ea 100755
 --- a/tools/gplay/mfw_gplay.c
 +++ b/tools/gplay/mfw_gplay.c
 @@ -858,18 +858,13 @@ int main(int argc,char *argv[])
@@ -2037,7 +1856,7 @@ index 0bcd78c..ee65100 100755
                  break;
              }
 diff --git a/tools/gplay/mfw_gplay_core.c b/tools/gplay/mfw_gplay_core.c
-index 8361499..4705cac 100755
+index 836149998dd9..4705cacfac21 100755
 --- a/tools/gplay/mfw_gplay_core.c
 +++ b/tools/gplay/mfw_gplay_core.c
 @@ -100,7 +100,7 @@ fsl_player_ret_val fsl_player_stop(fsl_player_handle handle);
@@ -2072,18 +1891,9 @@ index 8361499..4705cac 100755
      g_value_set_double(&value, pproperty->volume);
      g_object_set_property(G_OBJECT(pproperty->playbin), "volume", &value);
 diff --git a/tools/gplay/mfw_gplay_core.h b/tools/gplay/mfw_gplay_core.h
-index 85323b4..1d9ea13 100755
+index 85323b4e21ef..18a52a8a192f 100755
 --- a/tools/gplay/mfw_gplay_core.h
 +++ b/tools/gplay/mfw_gplay_core.h
-@@ -221,7 +221,7 @@ typedef struct{
-     fsl_player_u32 features;
-     
-     char * video_sink_name;
--    char * audio_sink_name;
-+    char * audio_sink_name;
-     
-     char * visual_name;
-     
 @@ -249,7 +249,7 @@ struct _fsl_player_class
      fsl_player_ret_val (*seek) (fsl_player_handle that, fsl_player_u32 time_ms, fsl_player_u32 flags);
      fsl_player_ret_val (*set_playback_rate) (fsl_player_handle that, double playback_rate);

@@ -5,10 +5,6 @@ PR_append = "+${DISTRO}"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
-MIRRORS =+ " \
-ftp://ftp.osuosl.org/.1/    http://www.cherokee-project.de/mirrors/ \n \
-"
-
 SRC_URI += " \
 	file://cherokee.conf \
 	file://digi.gif \

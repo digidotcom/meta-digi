@@ -8,7 +8,7 @@ HOMEPAGE = "http://www.stunnel.org"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=f41ebed8571077706fee0b860c4d6666"
 
-INC_PR = "r0"
+INC_PR = "r1"
 
 S = "${WORKDIR}/stunnel-${PV}"
 
@@ -18,9 +18,7 @@ INITSCRIPT_NAME = "stunnel"
 INITSCRIPT_PARAMS = "defaults"
 
 EXTRA_OECONF = "--with-ssl=${STAGING_LIBDIR}/.. \
-		--with-random=/dev/urandom \
-		--with-ptmx \
-		--without-ptc"
+		--with-random=/dev/urandom"
 
 do_install() {
 	autotools_do_install
