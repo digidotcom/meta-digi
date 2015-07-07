@@ -23,6 +23,9 @@ MACHINE_EXTRA_RRECOMMENDS += "${MACHINE_FIRMWARE}"
 
 MACHINE_FEATURES += "alsa touchscreen"
 
+# Flash image types
+IMAGE_FSTYPES ?= "jffs2.sum tar.bz2 ubifs"
+
 #
 # Supported variants
 #

@@ -19,6 +19,13 @@ set -e
 
 [ "${IFACE}" != "wlan0" ] && exit 0
 
+# For 'ccardimx28' do not unload the driver on halt/reboot
+RUNLEVEL="$(runlevel | awk '{print $2}')"
+MACHINENAME="$(cat /proc/device-tree/digi,machine,name 2>/dev/null || cat /sys/kernel/machine/name)"
+if [ "${MACHINENAME}" = "ccardimx28" ]; then
+	[ "${RUNLEVEL}" = "0" -o "${RUNLEVEL}" = "6" ] && exit 0
+fi
+
 if grep -qs ath6kl_sdio /proc/modules; then
 	rmmod ath6kl_sdio > /dev/null
 fi

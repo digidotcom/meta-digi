@@ -29,6 +29,9 @@ module_autoload_scc2_driver = "scc2_driver"
 module_autoload_sahara = "sahara"
 module_autoload_mt9v111_camera = "mt9v111_camera"
 
+# Flash image types
+IMAGE_FSTYPES ?= "jffs2.sum tar.bz2 ubifs"
+
 #
 # Supported variants
 #

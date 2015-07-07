@@ -31,6 +31,9 @@ module_autoload_sahara = "sahara"
 module_autoload_mt9v111_camera = "mt9v111_camera"
 module_autoload_pmic_battery = "pmic_battery"
 
+# Flash image types
+IMAGE_FSTYPES ?= "jffs2.sum tar.bz2 ubifs"
+
 #
 # Supported variants
 #
