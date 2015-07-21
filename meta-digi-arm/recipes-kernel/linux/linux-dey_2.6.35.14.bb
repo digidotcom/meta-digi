@@ -7,8 +7,8 @@ COMPATIBLE_MACHINE = "(mxs|mx5)"
 # Internal repo branch
 SRCBRANCH = "v2.6.35/dey-1.4/maint"
 
-SRCREV_external = "0e891a2b78dbd25529737be1f451b2eaed93385d"
-SRCREV_internal = "25be02c6f75d9457b11fbe720038ee7a61cf928b"
+SRCREV_external = "61438ad64ed57c1d60c96996d80087414a2f34f5"
+SRCREV_internal = "ca9f408091f56c1ef9d9ef3deec1fd41f4db5655"
 SRCREV = "${@base_conditional('DIGI_INTERNAL_GIT', '1' , '${SRCREV_internal}', '${SRCREV_external}', d)}"
 
 KERNEL_CFG_FRAGS ?= ""

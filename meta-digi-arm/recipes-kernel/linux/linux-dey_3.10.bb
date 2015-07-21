@@ -11,16 +11,12 @@ SRCBRANCH_mxs = "v3.10/dey-1.4/maint"
 SRCBRANCH_mx6 = "v3.10/dey-1.6/maint"
 
 SRCREV_external = ""
-SRCREV_external_mxs = "b456661694dff22828c7ee97e2bdb27013364022"
+SRCREV_external_mxs = "40258c74e811be11416e3bfd8a3f39016a014561"
 SRCREV_external_mx6 = "2b73369111961e4d999e050e96391a81706a8a77"
 SRCREV_internal = ""
-SRCREV_internal_mxs = "9d6cad604cae2f1020260d7db81ce1ba42ff6230"
+SRCREV_internal_mxs = "60e8450e06c2de80597d77cbd01904f0a4e471ab"
 SRCREV_internal_mx6 = "c9619ae17ff58ddad4ae7e86a211e082928abe15"
 SRCREV = "${@base_conditional('DIGI_INTERNAL_GIT', '1' , '${SRCREV_internal}', '${SRCREV_external}', d)}"
-
-# Kernel configuration fragments
-KERNEL_CFG_FRAGS ?= ""
-KERNEL_CFG_FRAGS_append = " ${@base_conditional('HAVE_EXAMPLE', '1' , 'file://config-spidev.cfg', '', d)}"
 
 config_dts() {
 	for DTB in ${KERNEL_DEVICETREE}; do
