@@ -23,3 +23,4 @@ do_install() {
 }
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
+COMPATIBLE_MACHINE = "(ccardimx28|ccimx6)"

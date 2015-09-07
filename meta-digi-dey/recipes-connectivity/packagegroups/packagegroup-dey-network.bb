@@ -4,9 +4,6 @@
 SUMMARY = "Network applications packagegroup for DEY image"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/LICENSE;md5=3f40d7994397109285ec7b81fdeb3b58"
-PACKAGE_ARCH = "${MACHINE_ARCH}"
-
-PR = "r0"
 
 inherit packagegroup
 
@@ -25,9 +22,14 @@ VIRTUAL-RUNTIME_snmp-manager ?= ""
 
 VIRTUAL-RUNTIME_ntp-client ?= "busybox-ntpd"
 
+CELLULAR_PKGS = "\
+    modemmanager \
+    ppp \
+"
+
 RDEPENDS_${PN} = "\
-	ppp \
 	iproute2 \
+	${@base_contains('DISTRO_FEATURES', 'cellular', '${CELLULAR_PKGS}', '', d)} \
 	${VIRTUAL-RUNTIME_ftp-server} \
 	${VIRTUAL-RUNTIME_http-server} \
 	${VIRTUAL-RUNTIME_network-utils} \
@@ -36,3 +38,5 @@ RDEPENDS_${PN} = "\
 "
 
 RDEPENDS_${PN}_append_mx5 = " ${@base_contains('MACHINE_FEATURES', 'ext-eth', 'kernel-module-smsc911x', '', d)}"
+
+PACKAGE_ARCH = "${MACHINE_ARCH}"

@@ -64,9 +64,9 @@ MACHINE = "ccimx6sbc"
 #
 # Maintain in sync with the same table in platform machine config file.
 #
-# Name        WiFi[w]    BT[b]    Proc[q|dl]      DDR[1024|512|256]
-# -----------------------------------------------------------------
-# wbq1024        Y         Y      quad/dual          1024MiB       (0x01,0x02,0x04)
+# Name        WiFi[w]    BT[b]    Proc[q|dl]      DDR[2048|1024|512|256]
+# ----------------------------------------------------------------------
+# wbq1024        Y         Y      quad/dual          1024MiB       (0x01,0x02,0x04,0x11)
 # wbq512         Y         Y      quad/dual           512MiB       (0x03,0x06)
 # wq1024         Y         N      quad/dual          1024MiB       (0x05)
 # wdl256         Y         N      duallite/solo       256MiB       (0x07)
@@ -74,6 +74,8 @@ MACHINE = "ccimx6sbc"
 # dl256          N         N      duallite/solo       256MiB       (0x09)
 # wdl512         Y         N      duallite/solo       512MiB       (0x0A)
 # wbdl1024       Y         Y      duallite/solo      1024MiB       (0x0B)
+# dl512          N         N      duallite/solo       512MiB       (0x0C)
+# wbq2048        Y         Y      quad/dual          2048MiB       (0x12)
 MACHINE_VARIANT = "wbq1024"
 
 #

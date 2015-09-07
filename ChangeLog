@@ -1,0 +1,44 @@
+                   Digi Embedded Yocto (DEY) 1.6
+                           Release Changelog
+
+                    (c) 2015, Digi International
+                    http://www.digiembedded.com/
+
+
+Version  Release date  Changelog
+-------------------------------------------------------------------------------
+1.6.x    mm-dd-yyyy    TBC
+
+
+1.6.7    09-04-2015
+
+    - Move CC6 variants 0x08, 0x0A, 0x0C and 0x11 to production software
+      support.
+    - Add CC6 variant 0x12 as beta software support.
+    - Initial support for 'cellular' networking.
+    - Include u-boot DUB-2.3.7.1 support for the ConnectCore 6 variant 0x12.
+
+
+1.6.6    07-22-2015
+
+    - Add DUB-1.6.5.2 and DUB-2.0.2.1 u-boot support for new DDR2 chips in
+      ConnectCard for MX28 (EOL replacement)
+    - Include u-boot DUB-1.6.5.2 support for the ConnectCard for MX28 variants
+      0x0E, 0x0F, 0x10, 0x11 and 0x12
+    - Include u-boot DUB-2.0.2.1 support for the ConnectCard for MX28
+      variant 0x12
+    - Include u-boot  DUB-2.3.5.1 support for the ConnectCore 6 variant 0x11
+    - DEL-1695: spidev is not enable by default in kernel config
+    - DEL-1694: Wireless is not loaded in kernel 2.6.35
+    - DEL-1665: Image from CSI camera not stable
+    - DEL-1659: ccwimx28 i2c audio lockup
+    - DEL-1655: time out messages accessing RPMB eMMC partition on variant 0x11
+    - DEL-1628: Allow to configure the GPU memory allocation as a percentage
+      of total memory
+    - DEL-1627: Add final wifi calibration files for wireless no bluetooth
+      variants
+    - DEL-1596: Long run reboot test failure on ConnectCard
+    - DEL-1595: Formatting the eMMC takes too long on Industrial variants
+    - DEL-1564: Set default environment location in fw_setenv
+    - DEL-1563: Rework uSD generation class
+    - DEL-1518: Image fron MIPI camera trembles occasionally
