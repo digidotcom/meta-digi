@@ -16,7 +16,7 @@ Version  Release date  Changelog
       support.
     - Add CC6 variant 0x12 as beta software support.
     - Initial support for 'cellular' networking.
-    - Include u-boot DUB-2.3.7.1 support for the ConnectCore 6 variant 0x12.
+    - Include u-boot DUB-2.3.7.2 support for the ConnectCore 6 variant 0x12.
 
 
 1.6.6    07-22-2015

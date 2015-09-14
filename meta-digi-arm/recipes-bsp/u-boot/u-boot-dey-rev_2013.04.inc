@@ -3,8 +3,8 @@
 # Internal repo branch
 SRCBRANCH = "v2013.04/dub-2.3/maint"
 
-SRCREV_external = "465e54b0e54d8df02bf9f19ce252eae5888b4592"
-SRCREV_internal = "ef2a3e267fe8b3cc9c0850f2a3be99c3cf668bac"
+SRCREV_external = "33c043b6dc1d48378c1fad4f3c4886213b6251cc"
+SRCREV_internal = "6e3f4acbd437bf8fad992c6f4e51aadf0cd4d2b5"
 SRCREV = "${@base_conditional('DIGI_INTERNAL_GIT', '1' , '${SRCREV_internal}', '${SRCREV_external}', d)}"
 
 SRC_URI_external = "${DIGI_GITHUB_GIT}/yocto-uboot.git;protocol=git;nobranch=1"
