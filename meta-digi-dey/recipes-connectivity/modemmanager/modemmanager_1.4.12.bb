@@ -11,9 +11,14 @@ inherit autotools gettext gtk-doc systemd
 
 DEPENDS = "glib-2.0 libmbim libqmi udev dbus-glib"
 
-SRC_URI = "http://www.freedesktop.org/software/ModemManager/ModemManager-${PV}.tar.xz"
-SRC_URI[md5sum] = "1e46a148e2af0e9f503660fcd2d8957d"
-SRC_URI[sha256sum] = "107ba0b4d0749aebb0347691a39f60891cc6004aeca8b2128d69c50557049a63"
+SRC_URI = " \
+	http://www.freedesktop.org/software/ModemManager/ModemManager-${PV}.tar.xz \
+	file://cellularifupdown \
+	file://0001-gobi-remove-plugin.patch \
+"
+
+SRC_URI[md5sum] = "66cc7266b15525cb366253e6639fc564"
+SRC_URI[sha256sum] = "7ef5035375a953b285a742591df0a65fd442f4641ce4d8f4392a41d6d6bc70b3"
 
 S = "${WORKDIR}/ModemManager-${PV}"
 
@@ -40,3 +45,10 @@ FILES_${PN}-dbg += "${libdir}/ModemManager/.debug"
 SYSTEMD_SERVICE_${PN} = "ModemManager.service"
 # no need to start on boot - dbus will start on demand
 SYSTEMD_AUTO_ENABLE = "disable"
+
+do_install_append() {
+	# Install ifupdown script for cellular interfaces
+	install -d ${D}${sysconfdir}/network/if-pre-up.d/ ${D}${sysconfdir}/network/if-post-down.d/
+	install -m 0755 ${WORKDIR}/cellularifupdown ${D}${sysconfdir}/network/if-pre-up.d/
+	ln -sf ../if-pre-up.d/cellularifupdown ${D}${sysconfdir}/network/if-post-down.d/cellularifupdown
+}

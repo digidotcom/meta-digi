@@ -36,6 +36,7 @@ DIGI_PREMIRROR_CFG="
 # Use internal mirror
 SOURCE_MIRROR_URL ?= \"http://build-linux.digi.com/yocto/downloads/\"
 INHERIT += \"own-mirrors\"
+BB_GENERATE_MIRROR_TARBALLS = \"1\"
 "
 
 # Alternative config for ccardimx28js
@@ -184,7 +185,8 @@ if pushd ${YOCTO_INST_DIR}; then
 		fi
 	fi
 	yes "" 2>/dev/null | ${REPO} init --no-repo-verify -u ${MANIFEST_URL} ${repo_revision}
-	time ${REPO} sync ${MAKE_JOBS}
+	${REPO} forall -p -c 'git remote prune $(git remote)'
+	time ${REPO} sync -d ${MAKE_JOBS}
 	popd
 fi
 
@@ -209,7 +211,7 @@ for platform in ${DY_PLATFORMS}; do
 				# mixing environments between different platform's projects
 				(
 					export TEMPLATECONF="${TEMPLATECONF:+${TEMPLATECONF}/${platform}}"
-					. ${YOCTO_INST_DIR}/mkproject.sh -p ${platform} ${_this_var_arg}
+					MKP_PAGER="" . ${YOCTO_INST_DIR}/mkproject.sh -p ${platform} ${_this_var_arg} <<< "y"
 					# Set a common DL_DIR and SSTATE_DIR for all platforms
 					sed -i  -e "/^#DL_DIR ?=/cDL_DIR ?= \"${YOCTO_PROJ_DIR}/downloads\"" \
 						-e "/^#SSTATE_DIR ?=/cSSTATE_DIR ?= \"${YOCTO_PROJ_DIR}/sstate-cache\"" \

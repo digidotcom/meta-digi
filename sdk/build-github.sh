@@ -125,7 +125,8 @@ if pushd ${YOCTO_INST_DIR}; then
 		fi
 	fi
 	yes "" 2>/dev/null | ${REPO} init --no-repo-verify -u ${MANIFEST_URL} ${repo_revision}
-	time ${REPO} sync ${MAKE_JOBS}
+	${REPO} forall -p -c 'git remote prune $(git remote)'
+	time ${REPO} sync -d ${MAKE_JOBS}
 	popd
 fi
 
@@ -140,7 +141,7 @@ for platform in ${DY_PLATFORMS}; do
 		# mixing environments between different platform's projects
 		(
 			export TEMPLATECONF="${TEMPLATECONF:+${TEMPLATECONF}/${platform}}"
-			. ${YOCTO_INST_DIR}/mkproject.sh -p ${platform}
+			MKP_PAGER="" . ${YOCTO_INST_DIR}/mkproject.sh -p ${platform} <<< "y"
 			# Set a common DL_DIR and SSTATE_DIR for all platforms
 			sed -i  -e "/^#DL_DIR ?=/cDL_DIR ?= \"${YOCTO_PROJ_DIR}/downloads\"" \
 				-e "/^#SSTATE_DIR ?=/cSSTATE_DIR ?= \"${YOCTO_PROJ_DIR}/sstate-cache\"" \

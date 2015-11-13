@@ -86,6 +86,42 @@ display_supported_platforms() {
 	unset MKP_SUPPORTED_PLATFORMS
 }
 
+do_license() {
+	local MKP_LICENSE_FILES=" \
+		${MKP_SCRIPTPATH}/sources/meta-digi/meta-digi-arm/DIGI_EULA \
+		${MKP_SCRIPTPATH}/sources/meta-digi/meta-digi-arm/DIGI_OPEN_EULA \
+		${MKP_SCRIPTPATH}/sources/meta-fsl-arm/EULA \
+	"
+	[ -z "${MKP_PAGER+x}" ] && MKP_PAGER="| more"
+	eval cat - "${MKP_LICENSE_FILES}" <<-_EOF_ ${MKP_PAGER}; printf "\n"
+		+-------------------------------------------------------------------------------+
+		|                                                                               |
+		|                                                                               |
+		|  This software depends on libraries and packages that are covered by the      |
+		|  following licenses:                                                          |
+		|                                                                               |
+		|      * Digi's end user license agreement                                      |
+		|      * Digi's third party and open source license notice                      |
+		|      * Freescale semiconductor software license agreement                     |
+		|                                                                               |
+		|  To have the right to use those binaries in your images you need to read and  |
+		|  accept the licenses.                                                         |
+		|                                                                               |
+		|                                                                               |
+		+-------------------------------------------------------------------------------+
+
+	_EOF_
+	unset MKP_LICENSE_FILES MKP_PAGER
+
+	ans=""
+	while [ -z "${ans}" ]; do
+		read -p "Do you accept all three license agreements? [y/Y to accept]: " ans
+	done
+	printf "%80s\n\n" | tr ' ' '-'
+
+	[ "${ans,,}" = "y" ] || return 1
+}
+
 do_mkproject() {
 	export TEMPLATECONF="${TEMPLATECONF:-${MKP_CONFIGPATH}/${MKP_PLATFORM}}"
 	source ${MKP_SCRIPTPATH}/sources/poky/oe-init-build-env .
@@ -95,11 +131,13 @@ do_mkproject() {
 	if [ -z "${MKP_OLD_PROJECT}" ]; then
 		# Customize project
 		chmod 644 ${MKP_PROJECTPATH}/conf/bblayers.conf ${MKP_PROJECTPATH}/conf/local.conf
-		sed -i  -e "s,##DIGIBASE##,${MKP_SCRIPTPATH}/sources,g" ${MKP_PROJECTPATH}/conf/bblayers.conf
+		sed -i -e "s,##DIGIBASE##,${MKP_SCRIPTPATH}/sources,g" ${MKP_PROJECTPATH}/conf/bblayers.conf
 		if [ -n "${MKP_VARIANT+x}" ]; then
 			sed -i -e "/^MACHINE_VARIANT =/cMACHINE_VARIANT = \"${MKP_VARIANT}\"" \
 				${MKP_PROJECTPATH}/conf/local.conf
 		fi
+		# At this point the user has accepted all the licenses, so enable the FSL EULA
+		sed -i -e "s,^#ACCEPT_FSL_EULA,ACCEPT_FSL_EULA,g" ${MKP_PROJECTPATH}/conf/local.conf
 		# Create dey-setup-environment script
 		printf "${MKP_SETUP_ENVIRONMENT}" "${MKP_SCRIPTPATH}" > ${MKP_PROJECTPATH}/dey-setup-environment
 		chmod +x ${MKP_PROJECTPATH}/dey-setup-environment
@@ -144,7 +182,7 @@ elif [ -z "${MKP_PLATFORM}" ]; then
 elif ! check_selected_platform; then
 	error "the selected platform \"${MKP_PLATFORM}\" is not available"
 else
-	do_mkproject
+	do_license && do_mkproject || printf "License NOT accepted. Make project cancelled.\n\n"
 fi
 
 # clean-up all variables (so the script can be re-sourced)

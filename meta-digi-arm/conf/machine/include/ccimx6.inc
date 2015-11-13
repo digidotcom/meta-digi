@@ -39,14 +39,12 @@ IMAGE_FSTYPES ?= "boot.vfat ext4 sdcard tar.bz2"
 #
 # Maintain in sync with the same table in platform local.conf template.
 #
-# Name        WiFi[w]    BT[b]    Proc[q|dl]      DDR[2048|1024|512|256]
+# Name        WiFi[w]    BT[b]    Proc[q|dl]      DDR[2048|1024|512]
 # ----------------------------------------------------------------------
 # wbq1024        Y         Y      quad/dual          1024MiB       (0x01,0x02,0x04,0x11)
 # wbq512         Y         Y      quad/dual           512MiB       (0x03,0x06)
 # wq1024         Y         N      quad/dual          1024MiB       (0x05)
-# wdl256         Y         N      duallite/solo       256MiB       (0x07)
-# q512           N         N      quad/dual           512MiB       (0x08)
-# dl256          N         N      duallite/solo       256MiB       (0x09)
+# q512           N         N      quad/dual           512MiB       (0x08,0x0E,0x0F)
 # wdl512         Y         N      duallite/solo       512MiB       (0x0A)
 # wbdl1024       Y         Y      duallite/solo      1024MiB       (0x0B)
 # dl512          N         N      duallite/solo       512MiB       (0x0C)
@@ -59,9 +57,7 @@ MACHINE_FEATURES += "accel-graphics accel-video"
 MACHINE_FEATURES_append_wbq1024 = " wifi bluetooth"
 MACHINE_FEATURES_append_wbq512 = " wifi bluetooth"
 MACHINE_FEATURES_append_wq1024 = " wifi"
-MACHINE_FEATURES_append_wdl256 = " wifi"
 MACHINE_FEATURES_append_q512 = ""
-MACHINE_FEATURES_append_dl256 = ""
 MACHINE_FEATURES_append_wdl512 = " wifi"
 MACHINE_FEATURES_append_wbdl1024 = " wifi bluetooth"
 MACHINE_FEATURES_append_dl512 = ""
@@ -72,9 +68,7 @@ UBOOT_MACHINE = ""
 UBOOT_MACHINE_wbq1024 = "ccimx6qsbc_config"
 UBOOT_MACHINE_wbq512 = "ccimx6qsbc512MB_config"
 UBOOT_MACHINE_wq1024 = "ccimx6qsbc_config"
-UBOOT_MACHINE_wdl256 = "ccimx6dlsbc256MB_config"
 UBOOT_MACHINE_q512 = "ccimx6qsbc512MB_config"
-UBOOT_MACHINE_dl256 = "ccimx6dlsbc256MB_config"
 UBOOT_MACHINE_wdl512 = "ccimx6dlsbc512MB_config"
 UBOOT_MACHINE_wbdl1024 = "ccimx6dlsbc_config"
 UBOOT_MACHINE_dl512 = "ccimx6dlsbc512MB_config"
@@ -85,9 +79,7 @@ CPU_FAMILY = ""
 CPU_FAMILY_wbq1024 = "mx6q"
 CPU_FAMILY_wbq512 = "mx6q"
 CPU_FAMILY_wq1024 = "mx6q"
-CPU_FAMILY_wdl256 = "mx6dl"
 CPU_FAMILY_q512 = "mx6q"
-CPU_FAMILY_dl256 = "mx6dl"
 CPU_FAMILY_wdl512 = "mx6dl"
 CPU_FAMILY_wbdl1024 = "mx6dl"
 CPU_FAMILY_dl512 = "mx6dl"
@@ -98,9 +90,7 @@ DTB_VARIANT_STR = ""
 DTB_VARIANT_STR_wbq1024 = "-wb"
 DTB_VARIANT_STR_wbq512 = "-wb"
 DTB_VARIANT_STR_wq1024 = "-w"
-DTB_VARIANT_STR_wdl256 = "-w"
 DTB_VARIANT_STR_q512 = "-z"
-DTB_VARIANT_STR_dl256 = "-z"
 DTB_VARIANT_STR_wdl512 = "-mw"
 DTB_VARIANT_STR_wbdl1024 = "-mwb"
 DTB_VARIANT_STR_dl512 = "-m"

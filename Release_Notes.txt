@@ -1,11 +1,11 @@
 
                    Digi Embedded Yocto (DEY) 1.6
                            Release Notes
-                           Build 1.6.7.1
+                           Build 1.6.8.3
 
                     (c) 2015, Digi International
                     http://www.digiembedded.com/
-                           September, 2015
+                           November, 2015
 
 
 Introduction
@@ -56,9 +56,6 @@ Contents
   All module variants are fully supported on the current release, except for
   the following which remain in beta software support:
 
-  CC-WMX-K77C-TE                             (Digi P/N 55001818-11)
-  CC-WMX-J98C-FJA                            (Digi P/N 55001818-18)
-  CC-WMX-J98C-FJA-1
   CC-MX-PF58-ZK                              (Digi P/N 55001674-04)
   CC-WMX-PF58-VM                             (Digi P/N 55001669-02)
   CC-WMX-PF47-ALG1                           (Digi P/N 55001667-02)

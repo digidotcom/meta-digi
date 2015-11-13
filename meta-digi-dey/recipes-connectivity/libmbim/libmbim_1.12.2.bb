@@ -14,3 +14,5 @@ inherit autotools pkgconfig
 SRC_URI = "http://www.freedesktop.org/software/${BPN}/${BPN}-${PV}.tar.xz"
 SRC_URI[md5sum] = "921fb5ab3f13f1e00833e009d8f3b4f6"
 SRC_URI[sha256sum] = "949351d3e3d69b81e40a49f1d187944c26149e0647a415f0227ccdc112047b29"
+
+RDEPENDS_${PN} = "eglibc-gconv-utf-16"

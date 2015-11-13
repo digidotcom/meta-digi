@@ -10,6 +10,13 @@ Version  Release date  Changelog
 1.6.x    mm-dd-yyyy    TBC
 
 
+1.6.8    17-11-2015
+
+    - Move CC6 variants 0x0B, 0x12, 0x0E and 0x0F to production software.
+    - Added cellular enhancements support.
+    - Include u-boot DUB-2.3.8.2 support for the ConnectCore 6 variants 0x0E and 0x0F.
+
+
 1.6.7    09-04-2015
 
     - Move CC6 variants 0x08, 0x0A, 0x0C and 0x11 to production software
