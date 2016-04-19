@@ -147,7 +147,7 @@ done<<-_EOF_
 	ccardimx28js    - e w wb web web1
 	ccimx51js       128 128a 128agv agv eagv w w128a w128agv wagv weagv
 	ccimx53js       - 128 4k e e4k w w128 we
-	ccimx6sbc       wbq1024 wbq512 wq1024 q512 wdl512 wbdl1024 dl512 wbq2048
+	ccimx6sbc       wbq1024 wbq512 wq1024 q512 wbdl1024 dl512 wbq2048 wbdl512
 _EOF_
 
 # Build alternative linux and u-boot

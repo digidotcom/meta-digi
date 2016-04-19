@@ -9,8 +9,15 @@ Version  Release date  Changelog
 -------------------------------------------------------------------------------
 1.6.x    mm-dd-yyyy    TBC
 
+1.6.9    04-19-2016
 
-1.6.8    17-11-2015
+    - Add support for CC6 variant 0x13
+    - Include U-Boot 'DUB-2.3.9.1' for CC6 with fix for erase operation on eMMC
+    - Add patch for CVE-2015-7547 glibc vulnerability
+    - Some minor fixes in Linux kernel (RTC, HDMI video modes, etc)
+
+
+1.6.8    11-17-2015
 
     - Move CC6 variants 0x0B, 0x12, 0x0E and 0x0F to production software.
     - Added cellular enhancements support.

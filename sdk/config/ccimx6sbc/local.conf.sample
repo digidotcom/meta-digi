@@ -74,6 +74,7 @@ MACHINE = "ccimx6sbc"
 # wbdl1024       Y         Y      duallite/solo      1024MiB       (0x0B)
 # dl512          N         N      duallite/solo       512MiB       (0x0C)
 # wbq2048        Y         Y      quad/dual          2048MiB       (0x12)
+# wbdl512        Y         Y      duallite/solo       512MiB       (0x13)
 MACHINE_VARIANT = "wbq1024"
 
 #
