@@ -1,13 +1,30 @@
                    Digi Embedded Yocto (DEY) 1.6
                            Release Changelog
 
-                    (c) 2015, Digi International
+                    (c) 2017, Digi International
                     http://www.digiembedded.com/
 
 
 Version  Release date  Changelog
 -------------------------------------------------------------------------------
 1.6.x    mm-dd-yyyy    TBC
+
+1.6.10   17-11-2017
+
+    - Fix for KRACK Attack vulnerability:
+        - CVE-2017-13077
+        - CVE-2017-13078
+        - CVE-2017-13079
+        - CVE-2017-13080
+        - CVE-2017-13081
+        - CVE-2017-13082
+        - CVE-2017-13086
+        - CVE-2017-13087
+        - CVE-2017-13088
+    - Fix for Blueborn bluetooth vulnerability:
+        - CVE-2017-1000250
+        - CVE-2017-1000251
+
 
 1.6.9    04-19-2016
 

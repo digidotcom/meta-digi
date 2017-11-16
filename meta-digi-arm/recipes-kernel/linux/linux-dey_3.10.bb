@@ -11,11 +11,11 @@ SRCBRANCH_mxs = "v3.10/dey-1.4/maint"
 SRCBRANCH_mx6 = "v3.10/dey-1.6/maint"
 
 SRCREV_external = ""
-SRCREV_external_mxs = "57865f30f46db95631e811e5ecdb49792e5d4940"
-SRCREV_external_mx6 = "de1309d79a520320879993e90eec0cf7c3df6a31"
+SRCREV_external_mxs = "7e11ad309967e60867df57dfecbe4a382abce260"
+SRCREV_external_mx6 = "171fff098ee4ac7fde83b56b8e317cadad1f56f0"
 SRCREV_internal = ""
-SRCREV_internal_mxs = "aa1701793ab27ccfe4931bbc55b46f6b9cb442e7"
-SRCREV_internal_mx6 = "b88b5c8b4f7612f2b4ac4888c23bc9b4f5da2c0c"
+SRCREV_internal_mxs = "6141de33ae21c6aef45b65b0bed7e5c11eb02a3a"
+SRCREV_internal_mx6 = "b8b3877598dc776de9c9eef850530ff8c29b8bcc"
 SRCREV = "${@base_conditional('DIGI_INTERNAL_GIT', '1' , '${SRCREV_internal}', '${SRCREV_external}', d)}"
 
 config_dts() {
@@ -54,6 +54,7 @@ do_update_dts_mxs() {
 		config_dts enable  '_ethernet1.dtsi'
 	else
 		config_dts disable '_ethernet1.dtsi'
+		config_dts enable '_usb1.dtsi'
 	fi
 	if [ -n "${HAVE_BT}" ]; then
 		config_dts enable  '_auart0_bluetooth.dtsi'

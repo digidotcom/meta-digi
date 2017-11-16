@@ -1,11 +1,11 @@
 
                    Digi Embedded Yocto (DEY) 1.6
                            Release Notes
-                           Build 1.6.9.1
+                           Build 1.6.9.2
 
                     (c) 2015, Digi International
                     http://www.digiembedded.com/
-                            April, 2016
+                            November, 2017
 
 
 Introduction

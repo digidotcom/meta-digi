@@ -25,6 +25,7 @@ SRC_URI += " \
     file://Makefile \
     ${@base_conditional('IS_KERNEL_2X', '1' , '', 'file://0001-atheros-convert-NLA_PUT-macros.patch', d)} \
     ${@base_conditional('IS_KERNEL_2X', '1' , '', 'file://0002-atheros-update-renamed-struct-members.patch', d)} \
+    file://fw-4.bin \
 "
 
 # MX6 wireless calibration files
@@ -46,6 +47,7 @@ do_install_append() {
 	install -d ${D}${sysconfdir}/network/if-pre-up.d ${D}${sysconfdir}/network/if-post-down.d
 	install -m 0755 ${WORKDIR}/atheros-pre-up ${D}${sysconfdir}/network/if-pre-up.d/atheros
 	install -m 0755 ${WORKDIR}/atheros-post-down ${D}${sysconfdir}/network/if-post-down.d/atheros
+	install -m 0644 ${WORKDIR}/fw-4.bin ${D}/lib/firmware/ath6k/AR6003/hw2.1.1/
 	install -d ${D}${sysconfdir}/modprobe.d
 	cat >> ${D}${sysconfdir}/modprobe.d/atheros.conf <<-_EOF_
 		install ath6kl_sdio true

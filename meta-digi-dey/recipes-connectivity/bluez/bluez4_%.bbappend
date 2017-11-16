@@ -1,6 +1,8 @@
-# Copyright (C) 2013 Digi International.
+# Copyright (C) 2013-2017 Digi International.
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+
+SRC_URI += "file://cve-2017-1000250.patch"
 
 EXTRA_OECONF_append = " --enable-health --enable-static"
 
