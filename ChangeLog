@@ -1,13 +1,22 @@
                    Digi Embedded Yocto (DEY) 1.6
                            Release Changelog
 
-                    (c) 2017, Digi International
+                    (c) 2018, Digi International
                     http://www.digiembedded.com/
 
 
 Version  Release date  Changelog
 -------------------------------------------------------------------------------
 1.6.x    mm-dd-yyyy    TBC
+
+
+1.6.11   05-07-2018
+
+    - Add DUB-1.6.71 and DUB-2.0.3.1 u-boot support for new NAND chips in
+      ConnectCard for MX28 (EOL replacement)
+    - Add support for aforementioned NAND chips in the Linux v3.10 kernel
+    - Some minor fixes in U-Boot (TFTP timeouts, false kernel corruptions).
+
 
 1.6.10   17-11-2017
 
