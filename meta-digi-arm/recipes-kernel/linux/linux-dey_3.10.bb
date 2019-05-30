@@ -5,6 +5,10 @@ require recipes-kernel/linux/linux-dtb.inc
 
 DEPENDS += "lzop-native bc-native"
 
+SRC_URI_append_ccimx6 = " \
+    file://0001-mmc-remove-check-for-max-EXT_CSD_REV.patch \
+"
+
 # Internal repo branch
 SRCBRANCH = "v3.10/master"
 SRCBRANCH_mxs = "v3.10/dey-1.4/maint"
