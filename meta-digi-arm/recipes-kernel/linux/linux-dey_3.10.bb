@@ -15,11 +15,11 @@ SRCBRANCH_mxs = "v3.10/dey-1.4/maint"
 SRCBRANCH_mx6 = "v3.10/dey-1.6/maint"
 
 SRCREV_external = ""
-SRCREV_external_mxs = "a4adb814dc9f1d2da3329b0fcd4040ec762bb24b"
-SRCREV_external_mx6 = "171fff098ee4ac7fde83b56b8e317cadad1f56f0"
+SRCREV_external_mxs = "a5a884ee0d227915339005a47d35151fe6077b44"
+SRCREV_external_mx6 = "44a934f8576387bfc632e86a953002ba7bfcc830"
 SRCREV_internal = ""
-SRCREV_internal_mxs = "500c736916f1967d78b6c1033e57cf34e748fa53"
-SRCREV_internal_mx6 = "b8b3877598dc776de9c9eef850530ff8c29b8bcc"
+SRCREV_internal_mxs = "ff6330da59da2bba49a13e6a865fc294c67fe414"
+SRCREV_internal_mx6 = "6af4be8090b616bf4fc6a20c48e99df6436422ec"
 SRCREV = "${@base_conditional('DIGI_INTERNAL_GIT', '1' , '${SRCREV_internal}', '${SRCREV_external}', d)}"
 
 config_dts() {
