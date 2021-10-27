@@ -11,7 +11,7 @@ inherit pkgconfig
 ATH_PROP_PN = "atheros-proprietary-v3.4p4-b3.4.0.158"
 
 SRC_URI_src = " \
-    http://build-linux.digi.com/yocto/downloads/${ATH_PROP_PN}.tar.gz;name=tarball \
+    http://log-sln-jenkins.digi.com/yocto/downloads/${ATH_PROP_PN}.tar.gz;name=tarball \
     file://0001-cross-compile.patch \
 "
 SRC_URI_bin = " \

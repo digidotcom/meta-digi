@@ -16,7 +16,14 @@ WPA_DRIVER = "nl80211"
 
 # Firmware
 MACHINE_FIRMWARE ?= ""
-MACHINE_FIRMWARE_append = " ${@base_conditional('HAVE_BT', '1' , 'firmware-atheros-ar3k', '', d)}"
+MACHINE_FIRMWARE_append = " ${@base_conditional('HAVE_BT', '1' , \
+                                                base_conditional("IS_KERNEL_2X", "1" , "firmware-atheros-ar3k", \
+                                                                 "firmware-atheros-ar3k firmware-qualcomm-qca6564-bt", d), \
+                                                '', d)}"
+MACHINE_FIRMWARE_append = " ${@base_conditional('HAVE_WIFI', '1' , \
+                                                base_conditional("IS_KERNEL_2X", "1" , "firmware-atheros-ath6kl", \
+                                                                 "firmware-atheros-ath6kl firmware-qualcomm-qca6564-wifi", d), \
+                                                '', d)}"
 
 MACHINE_EXTRA_RDEPENDS    += "mtd-utils-ubifs nvram ubootenv update-flash"
 MACHINE_EXTRA_RRECOMMENDS += "${MACHINE_FIRMWARE}"

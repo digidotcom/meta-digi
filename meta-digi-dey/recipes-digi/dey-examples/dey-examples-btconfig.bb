@@ -1,11 +1,13 @@
-# Copyright (C) 2013 Digi International.
+# Copyright (C) 2013-2021 Digi International.
 
 SUMMARY = "DEY examples: application to perform low level bluetooth"
 SECTION = "examples"
 LICENSE = "GPL-2.0"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425610833a22dbe6"
 
-DEPENDS = "bluez4"
+inherit bluetooth
+
+DEPENDS = "${BLUEZ}"
 
 PR = "${DISTRO}.r0"
 

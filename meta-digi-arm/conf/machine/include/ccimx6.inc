@@ -19,7 +19,8 @@ WPA_DRIVER = "nl80211"
 MACHINE_FIRMWARE ?= ""
 MACHINE_FIRMWARE_append_mx6q = " firmware-imx-vpu-imx6q"
 MACHINE_FIRMWARE_append_mx6dl = " firmware-imx-vpu-imx6d"
-MACHINE_FIRMWARE_append = " ${@base_conditional('HAVE_BT', '1' , 'firmware-atheros-ar3k', '', d)}"
+MACHINE_FIRMWARE_append = " ${@base_conditional('HAVE_BT', '1' , 'firmware-atheros-ar3k firmware-qualcomm-qca6564-bt', '', d)}"
+MACHINE_FIRMWARE_append = " ${@base_conditional('HAVE_WIFI', '1' , 'firmware-atheros-ath6kl firmware-qualcomm-qca6564-wifi', '', d)}"
 
 MACHINE_EXTRA_RDEPENDS += " \
     e2fsprogs \
@@ -28,7 +29,7 @@ MACHINE_EXTRA_RDEPENDS += " \
     u-boot-dey-fw-utils \
 "
 MACHINE_EXTRA_RRECOMMENDS += "${MACHINE_FIRMWARE}"
-MACHINE_EXTRA_RRECOMMENDS += "fsl-alsa-plugins"
+MACHINE_EXTRA_RRECOMMENDS += "fsl-alsa-plugins cryptodev-module rng-tools"
 
 # Flash image types
 SDCARD_ROOTFS ?= "${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.rootfs.ext4"
