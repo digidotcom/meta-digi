@@ -1,0 +1,2 @@
+# Load Atheros wireless module
+SUBSYSTEM=="sdio", ACTION=="add", ENV{MODALIAS}=="sdio:c00v0271d0301", RUN="/etc/udev/scripts/atheros.sh"

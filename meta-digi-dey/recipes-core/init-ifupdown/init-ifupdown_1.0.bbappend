@@ -78,3 +78,28 @@ do_install_append() {
 do_install_append_mx5() {
 	install -m 0755 ${WORKDIR}/ifup ${D}${sysconfdir}/network/if-up.d
 }
+
+pkg_postinst_${PN}() {
+	# run the postinst script on first boot
+	if [ x"$D" != "x" ]; then
+		exit 1
+	fi
+
+	COMPAT="/proc/device-tree/compatible"
+	WIFI_MAC="/proc/device-tree/wireless/mac-address"
+	WIFI_FOUND="0"
+
+	# Only execute the script on ccardimx28/ccimx6 platforms
+	if [ -e ${WIFI_MAC} -a $(grep fsl,imx28 ${COMPAT} || grep fsl,imx6dl ${COMPAT} || grep fsl,imx6q ${COMPAT} | grep -v fsl,imx6qp) ]; then
+		for id in $(find /sys/devices -name modalias -print0 | xargs -0 cat ); do
+			if [[ "$id" == "sdio:c00v0271d0301" || "$id" == "sdio:c00v0271d050A" ]] ; then
+				WIFI_FOUND="1"
+				break
+			fi
+		done
+
+		if [[ "$WIFI_FOUND" == "0" ]] ; then
+			sed -i -e "s,^auto wlan0,#auto wlan0,g" /etc/network/interfaces
+		fi
+	fi
+}

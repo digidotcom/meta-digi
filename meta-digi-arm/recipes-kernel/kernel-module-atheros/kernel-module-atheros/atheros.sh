@@ -3,7 +3,7 @@
 #
 #  10-atheros_pre-up
 #
-#  Copyright (C) 2012 by Digi International Inc.
+#  Copyright (C) 2012-2021 by Digi International Inc.
 #  All rights reserved.
 #
 #  This program is free software; you can redistribute it and/or modify it
@@ -16,8 +16,6 @@
 #===============================================================================
 
 set -e
-
-[ "${IFACE}" != "wlan0" ] && exit 0
 
 FIRMWARE_DIR="/lib/firmware/ath6k/AR6003/hw2.1.1"
 
@@ -45,6 +43,12 @@ ATH6KL_DBG_RECOVERY=0x00400000
 ATH6KL_DBG_ANY=0xffffffff
 
 ATH6KL_DEBUG_MASK="${ATH6KL_DBG_NONE}"
+
+# At this point of the boot (udev script), the system log (syslog) is not
+# available yet, so use the kernel log buffer from userspace.
+log() {
+        printf "<$1>ath6kl: $2\n" >/dev/kmsg
+}
 
 #
 # Get the wlan MAC address from kernel command line.  Use a default
@@ -99,16 +103,16 @@ US_CODE="0x0"
 case "${MACHINE}:${MOD_VARIANT}:${REGION_CODE}" in
 	ccimx6sbc:0x05:${US_CODE}|ccimx6sbc:0x07:${US_CODE}|ccimx6sbc:0x0a:${US_CODE})
 		BDATA_SOURCE="Digi_6203_2_ANT-US.bin"
-		logger -t atheros "Setting US wireless region (no bluetooth)";;
+		log "5" "Setting US wireless region (no bluetooth)";;
 	ccimx6sbc:0x05:*|ccimx6sbc:0x07:*|ccimx6sbc:0x0a:*)
 		BDATA_SOURCE="Digi_6203_2_ANT-World.bin"
-		logger -t atheros "Setting non-US (world) wireless region (no bluetooth)";;
+		log "5" "Setting non-US (world) wireless region (no bluetooth)";;
 	*:*:${US_CODE})
 		BDATA_SOURCE="Digi_6203-6233-US.bin"
-		logger -t atheros "Setting US wireless region";;
+		log "5" "Setting US wireless region";;
 	*:*:*)
 		BDATA_SOURCE="Digi_6203-6233-World.bin"
-		logger -t atheros "Setting non-US (world) wireless region";;
+		log "5" "Setting non-US (world) wireless region";;
 esac
 
 # We don't want to rewrite NAND every time we boot so only
@@ -119,7 +123,7 @@ if [ ! -e "${BDATA_LINK}" ] || ! cmp -s "${BDATA_LINK}" "${FIRMWARE_DIR}/${BDATA
 fi
 
 # Load 'cfg80211' and let it settle down (needed by 'ath6kl_sdio')
-modprobe -q cfg80211 && sleep 0.2
+modprobe -q cfg80211_ath && sleep 1
 
 # ath6kl_sdio.ko
 if ! grep -qs ath6kl_sdio /proc/modules; then
@@ -129,10 +133,10 @@ if ! grep -qs ath6kl_sdio /proc/modules; then
 		[ -d "/sys/class/net/wlan0" ] && break
 		RETRIES="$((RETRIES - 1))"
 		rmmod ath6kl_sdio > /dev/null
-		echo "Retrying to load wireless"
+		log "5" "Retrying to load wireless"
 		sleep 2
 	done
-	[ "${RETRIES}" -eq "0" ] && echo "Loading ath6kl_sdio module: [FAILED]"
+	[ "${RETRIES}" -eq "0" ] && log "3" "Loading ath6kl_sdio module: [FAILED]"
 fi
 
 # Delay required for the interface 'wlan0' to settle down before trying to configure it.

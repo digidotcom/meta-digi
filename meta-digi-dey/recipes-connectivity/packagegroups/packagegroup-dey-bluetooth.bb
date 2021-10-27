@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2012 Digi International.
+# Copyright (C) 2012-2021 Digi International.
 #
 SUMMARY = "Bluetooth packagegroup for DEY image"
 LICENSE = "MIT"
@@ -8,10 +8,11 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 PR = "r0"
 
+inherit bluetooth
 inherit packagegroup
 
 RDEPENDS_${PN} = "\
 	btfilter \
-	bluez4 \
-	bluez4-testtools \
+	${BLUEZ} \
+	${BLUEZ}-testtools \
 "

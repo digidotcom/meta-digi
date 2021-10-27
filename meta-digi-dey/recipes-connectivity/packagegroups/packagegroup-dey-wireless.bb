@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2012 Digi International.
+# Copyright (C) 2012-2021 Digi International.
 #
 SUMMARY = "Wireless packagegroup for DEY image"
 LICENSE = "MIT"
@@ -12,8 +12,8 @@ inherit packagegroup
 
 WIRELESS_MODULE ?= ""
 WIRELESS_MODULE_append_mx5 = "${@base_contains('MACHINE_FEATURES', 'wifi', 'kernel-module-redpine', '', d)}"
-WIRELESS_MODULE_append_mxs = "${@base_contains('MACHINE_FEATURES', 'wifi', 'kernel-module-atheros', '', d)}"
-WIRELESS_MODULE_append_mx6 = "${@base_contains('MACHINE_FEATURES', 'wifi', 'kernel-module-atheros', '', d)}"
+WIRELESS_MODULE_append_mxs = "${@base_contains('MACHINE_FEATURES', 'wifi', 'kernel-module-atheros kernel-module-qualcomm', '', d)}"
+WIRELESS_MODULE_append_mx6 = "${@base_contains('MACHINE_FEATURES', 'wifi', 'kernel-module-atheros kernel-module-qualcomm', '', d)}"
 
 RDEPENDS_${PN} = "\
     crda \
@@ -24,5 +24,5 @@ RDEPENDS_${PN} = "\
     ${WIRELESS_MODULE} \
 "
 
-RDEPENDS_${PN}_append_mxs = " iw ath-prop-tools"
-RDEPENDS_${PN}_append_mx6 = " iw ath-prop-tools"
+RDEPENDS_${PN}_append_mxs = " iw hostap-daemon ath-prop-tools"
+RDEPENDS_${PN}_append_mx6 = " iw hostap-daemon ath-prop-tools"
