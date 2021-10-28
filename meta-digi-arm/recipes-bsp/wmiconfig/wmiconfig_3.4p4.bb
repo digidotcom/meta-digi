@@ -16,7 +16,7 @@ BIN_MD5    = "f502062cdecae89cd68562e476a896c9"
 BIN_SHA256 = "687b7139904b1de7424abfdf7968d30fe2cef3c9bae95638e05d9532aa2bca2b"
 
 SRC_URI_src = " \
-    http://build-linux.digi.com/yocto/downloads/${ATH_PROP_PN}.tar.gz;md5sum=${SRC_MD5};sha256sum=${SRC_SHA256} \
+    http://log-sln-jenkins.digi.com/yocto/downloads/${ATH_PROP_PN}.tar.gz;md5sum=${SRC_MD5};sha256sum=${SRC_SHA256} \
     file://0001-cross_compile.patch \
 "
 SRC_URI_bin = "file://wmiconfig;md5sum=${BIN_MD5};sha256sum=${BIN_SHA256}"
