@@ -42,7 +42,7 @@ IMAGE_FSTYPES ?= "boot.vfat ext4 sdcard tar.bz2"
 #
 # Name        WiFi[w]    BT[b]    Proc[q|dl]      DDR[2048|1024|512]
 # ----------------------------------------------------------------------
-# wbq1024        Y         Y      quad/dual          1024MiB       (0x01,0x02,0x04,0x11)
+# wbq1024        Y         Y      quad/dual          1024MiB       (0x01,0x02,0x04,0x11,0x16)
 # wbq512         Y         Y      quad/dual           512MiB       (0x03,0x06)
 # wq1024         Y         N      quad/dual          1024MiB       (0x05)
 # q512           N         N      quad/dual           512MiB       (0x08,0x0E,0x0F)
