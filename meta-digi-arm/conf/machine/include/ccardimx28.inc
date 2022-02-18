@@ -21,7 +21,8 @@ MACHINE_FIRMWARE_append = " ${@base_conditional('HAVE_BT', '1' , \
                                                                  "firmware-atheros-ar3k firmware-qualcomm-qca6564-bt", d), \
                                                 '', d)}"
 MACHINE_FIRMWARE_append = " ${@base_conditional('HAVE_WIFI', '1' , \
-                                                base_conditional("IS_KERNEL_2X", "1" , "firmware-atheros-ath6kl", \
+                                                base_conditional("IS_KERNEL_2X", "1" , "firmware-qualcomm-qca6564-wifi \
+                                                                                        linux-backports", \
                                                                  "firmware-atheros-ath6kl firmware-qualcomm-qca6564-wifi", d), \
                                                 '', d)}"
 

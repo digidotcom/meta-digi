@@ -13,7 +13,7 @@ inherit packagegroup
 WIRELESS_MODULE ?= ""
 WIRELESS_MODULE_append_mx5 = "${@base_contains('MACHINE_FEATURES', 'wifi', 'kernel-module-redpine', '', d)}"
 WIRELESS_MODULE_append_mxs = "${@base_contains('MACHINE_FEATURES', 'wifi', \
-                                               base_conditional("IS_KERNEL_2X", "1" , "kernel-module-atheros", \
+                                               base_conditional("IS_KERNEL_2X", "1" , "", \
                                                                                       "kernel-module-atheros kernel-module-qualcomm", d), \
                                                '', d)}"
 WIRELESS_MODULE_append_mx6 = "${@base_contains('MACHINE_FEATURES', 'wifi', 'kernel-module-atheros kernel-module-qualcomm', '', d)}"

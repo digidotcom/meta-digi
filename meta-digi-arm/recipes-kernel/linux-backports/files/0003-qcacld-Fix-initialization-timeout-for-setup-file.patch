@@ -1,0 +1,26 @@
+From: Arturo Buzarra <arturo.buzarra@digi.com>
+Date: Wed, 23 Mar 2022 13:18:11 +0100
+Subject: [PATCH] qcacld: Fix initialization timeout for setup file
+
+Signed-off-by: Arturo Buzarra <arturo.buzarra@digi.com>
+---
+ CORE/SERVICES/BMI/ol_fw.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CORE/SERVICES/BMI/ol_fw.c b/CORE/SERVICES/BMI/ol_fw.c
+index cf758b62d..da520b668 100644
+--- a/CORE/SERVICES/BMI/ol_fw.c
++++ b/CORE/SERVICES/BMI/ol_fw.c
+@@ -1969,11 +1969,11 @@ int ol_download_firmware(struct ol_softc *scn)
+ 		BMIReadMemory(scn->hif_hdl, addr, (A_UCHAR*)&value, 4, scn);
+ 		printk("Disable PCIe use AXI memory:0x%08X-0x%08X\n", addr, value);
+ 	}
+ 
+ 	if (scn->enablesinglebinary == FALSE) {
+-		if (ol_transfer_bin_file(scn, ATH_SETUP_FILE,
++		if (!scn->fw_files.setup_file && ol_transfer_bin_file(scn, ATH_SETUP_FILE,
+ 					BMI_SEGMENTED_WRITE_ADDR, TRUE) == EOK) {
+ 			/* Execute the SETUP code only if entry found and downloaded */
+ 			param = 0;
+ 			BMIExecute(scn->hif_hdl, address, &param, scn);
+ 		}

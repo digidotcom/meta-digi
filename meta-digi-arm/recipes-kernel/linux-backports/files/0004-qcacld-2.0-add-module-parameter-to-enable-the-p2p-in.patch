@@ -1,0 +1,57 @@
+From: Arturo Buzarra <arturo.buzarra@digi.com>
+Date: Tue, 19 Mar 2019 16:13:51 +0100
+Subject: [PATCH] qcacld-2.0: add module parameter to enable the p2p interface
+
+This commit adds a module parameter to bring up the p2p interface
+in the initialization process.
+
+https://jira.digi.com/browse/DEL-6503
+
+Signed-off-by: Arturo Buzarra <arturo.buzarra@digi.com>
+---
+ CORE/HDD/src/wlan_hdd_main.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/CORE/HDD/src/wlan_hdd_main.c b/CORE/HDD/src/wlan_hdd_main.c
+index 70cc55c73..2b703c16a 100755
+--- a/CORE/HDD/src/wlan_hdd_main.c
++++ b/CORE/HDD/src/wlan_hdd_main.c
+@@ -169,10 +169,13 @@ static struct kparam_string fwpath = {
+ };
+ 
+ static char *country_code;
+ static int   enable_11d = -1;
+ static int   enable_dfs_chan_scan = -1;
++#ifdef WLAN_OPEN_P2P_INTERFACE
++static int   enable_p2p = -1;
++#endif
+ 
+ #ifndef MODULE
+ static int wlan_hdd_inited;
+ #endif
+ 
+@@ -12193,11 +12196,12 @@ int hdd_wlan_startup(struct device *dev, v_VOID_t *hif_sc)
+                                   NET_NAME_UNKNOWN,
+                                   rtnl_lock_enable);
+ 
+ #ifdef WLAN_OPEN_P2P_INTERFACE
+       /* Open P2P device interface */
+-      if (pAdapter != NULL) {
++      hddLog(VOS_TRACE_LEVEL_INFO, "%s: P2P interface %s", __func__, enable_p2p == 1 ? "enabled" : "disabled");
++      if (pAdapter != NULL && 1 == enable_p2p) {
+          if (pHddCtx->cfg_ini->isP2pDeviceAddrAdministrated) {
+             vos_mem_copy( pHddCtx->p2pDeviceAddress.bytes,
+                         pHddCtx->cfg_ini->intfMacAddr[0].bytes,
+                         sizeof(tSirMacAddr));
+ 
+@@ -14665,5 +14669,10 @@ module_param(enable_dfs_chan_scan, int,
+ module_param(enable_11d, int,
+              S_IRUSR | S_IRGRP | S_IROTH);
+ 
+ module_param(country_code, charp,
+              S_IRUSR | S_IRGRP | S_IROTH);
++
++#ifdef WLAN_OPEN_P2P_INTERFACE
++module_param(enable_p2p, int,
++             S_IRUSR | S_IRGRP | S_IROTH);
++#endif
