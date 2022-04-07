@@ -30,7 +30,7 @@ EXTRA_OEMAKE = " \
 
 DEPENDS += "virtual/kernel"
 
-inherit module-base
+inherit module-base update-rc.d
 
 addtask make_scripts after do_patch before do_compile
 do_make_scripts[lockfiles] = "${TMPDIR}/kernel-scripts.lock"
@@ -76,6 +76,7 @@ SRC_URI_append = " \
     file://81-sdio-qcom.rules \
     file://modprobe-qualcomm.conf \
     file://qualcomm.sh \
+    file://bluetooth-init \
 "
 
 BUILD_VER = "v4.2.80.63"
@@ -125,6 +126,10 @@ do_install_append() {
 	install -d ${D}${sysconfdir}/udev/rules.d ${D}${sysconfdir}/udev/scripts
 	install -m 0644 ${WORKDIR}/81-sdio-qcom.rules ${D}${sysconfdir}/udev/rules.d/
 	install -m 0755 ${WORKDIR}/qualcomm.sh ${D}${sysconfdir}/udev/scripts/
+
+	# Qualcomm Bluetooth init script
+	install -d ${D}${sysconfdir}/init.d/
+	install -m 0755 ${WORKDIR}/bluetooth-init ${D}${sysconfdir}/init.d/bluetooth
 }
 
 FILES_${PN} += " \
@@ -133,7 +138,11 @@ FILES_${PN} += " \
     ${sysconfdir}/modprobe.d/qualcomm.conf \
     ${base_libdir}/firmware/wlan/cfg.dat \
     ${base_libdir}/firmware/wlan/qcom_cfg.ini \
+    ${sysconfdir}/init.d \
 "
+
+INITSCRIPT_NAME = "bluetooth"
+INITSCRIPT_PARAMS = "start 10 5 ."
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 COMPATIBLE_MACHINE = "(ccardimx28js)"

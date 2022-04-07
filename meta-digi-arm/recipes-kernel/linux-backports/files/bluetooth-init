@@ -1,0 +1,38 @@
+#!/bin/sh
+#===============================================================================
+#
+#  bluetooth
+#
+#  Copyright (C) 2022 by Digi International Inc.
+#  All rights reserved.
+#
+#  This program is free software; you can redistribute it and/or modify it
+#  under the terms of the GNU General Public License version 2 as published by
+#  the Free Software Foundation.
+#
+#
+#  !Description: Disable Bluetooth
+#
+#===============================================================================
+
+set -e
+
+if [ "${1}" != "start" ]; then
+	exit 0
+fi
+
+SCRIPTNAME="$(basename "${0}")"
+BT_EN_QCA_GPIO_NR="21"
+
+gpio_set() {
+	GPIO_PATH="/sys/class/gpio/gpio${1}"
+	[ -d "${GPIO_PATH}" ] || printf "%s" ${1} > /sys/class/gpio/export
+	printf out > ${GPIO_PATH}/direction && sleep .2
+	printf "${2}" > ${GPIO_PATH}/value && sleep .2
+	[ -d "${GPIO_PATH}" ] && printf "%s" ${1} > /sys/class/gpio/unexport
+}
+
+
+# Set the BT_EN line
+gpio_set ${BT_EN_QCA_GPIO_NR} 0
+echo "${SCRIPTNAME}: Disable Bluetooth (BT_EN)"
