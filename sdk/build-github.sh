@@ -70,6 +70,18 @@ copy_images() {
 }
 
 #
+# Pre-fetch all the source packages (with a retries mechanism)
+#
+fetch_all() {
+	local FETCH_LOG="fetch.log"
+	for _ in $(seq 1 3); do
+		bitbake -k -c fetchall "${1}" 2>&1 | tee "${FETCH_LOG}"
+		grep -qs 'Summary.*ERROR' "${FETCH_LOG}" || break
+	done
+	rm -f "${FETCH_LOG}"
+}
+
+#
 # In the buildserver we share the state-cache for all the different platforms
 # we build in a jenkins job. This may cause problems with some packages that
 # have different runtime dependences depending on the platform.
@@ -153,6 +165,7 @@ for platform in ${DY_PLATFORMS}; do
 			fi
 			for target in ${DY_TARGET}; do
 				printf "\n[INFO] Building the $target target.\n"
+				time fetch_all "${target}"
 				time bitbake ${target}
 			done
 			purge_sstate

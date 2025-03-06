@@ -26,6 +26,14 @@ LOGFILE="/var/log/bluetoothd.log"
 FIRMWARE_FILE="/lib/firmware/qca/nvm_tlv_3.2.bin"
 BT_CHIP="##BT_CHIP##"
 
+gpio_set() {
+	GPIO_PATH="/sys/class/gpio/gpio${1}"
+	[ -d "${GPIO_PATH}" ] || printf "%s" ${1} > /sys/class/gpio/export
+	printf out > ${GPIO_PATH}/direction && sleep .2
+	printf "${2}" > ${GPIO_PATH}/value && sleep .2
+	[ -d "${GPIO_PATH}" ] && printf "%s" ${1} > /sys/class/gpio/unexport
+}
+
 bt_init_qca6564() {
 	if grep -qs '\<digi,ccardimx28\>' /proc/device-tree/compatible; then
 		BT_EN_QCA_GPIO_NR="21"
@@ -34,16 +42,13 @@ bt_init_qca6564() {
 	fi
 
 	# Reset the BT_EN line
-	BT_EN_L="/sys/class/gpio/gpio${BT_EN_QCA_GPIO_NR}"
-	[ -d "${BT_EN_L}" ] || printf "%s" ${BT_EN_QCA_GPIO_NR} > /sys/class/gpio/export
-	printf out > ${BT_EN_L}/direction && sleep .1
-	printf 0 > ${BT_EN_L}/value && sleep .2
-	printf 1 > ${BT_EN_L}/value && sleep .2
-	[ -d "${BT_EN_L}" ] && printf "%s" ${BT_EN_QCA_GPIO_NR} > /sys/class/gpio/unexport
+	gpio_set ${BT_EN_QCA_GPIO_NR} 0
+	gpio_set ${BT_EN_QCA_GPIO_NR} 1
 
 	if hciattach -t120 ttyBt qca 3000000 flow 2>${LOGFILE}; then
 		:	# No-op
 	else
+		gpio_set ${BT_EN_QCA_GPIO_NR} 0
 		echo "${SCRIPTNAME}: FAILED (hciattach)"
 		exit
 	fi
@@ -54,29 +59,39 @@ bt_init_qca6564() {
 
 	# Up the interface to be able to send hci commands
 	if ! hciconfig hci0 up; then
+		gpio_set ${BT_EN_QCA_GPIO_NR} 0
 		echo "${SCRIPTNAME}: FAILED (hci0 up)"
 		exit
 	fi
 
 	# Set the MAC address
 	if ! hcitool -i hci0 cmd 3F 000B 01 02 06 ${HCI_BTADDR} > /dev/null; then
+		gpio_set ${BT_EN_QCA_GPIO_NR} 0
 		echo "${SCRIPTNAME}: FAILED (hci set MAC)"
 		exit
 	fi
 
 	# HCI Reset
 	if ! hcitool -i hci0 cmd 03 0003 00 > /dev/null; then
+		gpio_set ${BT_EN_QCA_GPIO_NR} 0
 		echo "${SCRIPTNAME}: FAILED (hci reset)"
 		exit
 	fi
 
 	# Down and up the interface to load the new MAC address
 	if ! hciconfig hci0 down; then
+		gpio_set ${BT_EN_QCA_GPIO_NR} 0
 		echo "${SCRIPTNAME}: FAILED (hci0 down)"
 		exit
 	fi
 
-	hciconfig hci0 up && echo "${SCRIPTNAME}: OK" || echo "${SCRIPTNAME}: FAILED"
+	if ! hciconfig hci0 up; then
+		gpio_set ${BT_EN_QCA_GPIO_NR} 0
+		echo "${SCRIPTNAME}: FAILED (hci0 up)"
+		exit
+	fi
+
+	echo "${SCRIPTNAME}: OK"
 }
 
 bt_init_ar3k() {
@@ -120,24 +135,22 @@ bt_init_ar3k() {
 			#
 			# If hciattach fails try to recover it by toggling the BT power GPIO
 			#
-			BT_PWR_L="/sys/class/gpio/gpio${BT_PWR_GPIO_NR}"
-			[ -d "${BT_PWR_L}" ] || printf "%s" ${BT_PWR_GPIO_NR} > /sys/class/gpio/export
-			printf out > ${BT_PWR_L}/direction && sleep .2
-			printf 0 > ${BT_PWR_L}/value && sleep .2
-			printf 1 > ${BT_PWR_L}/value && sleep .2
-			[ -d "${BT_PWR_L}" ] && printf "%s" ${BT_PWR_GPIO_NR} > /sys/class/gpio/unexport
+			gpio_set ${BT_PWR_GPIO_NR} 0
+			gpio_set ${BT_PWR_GPIO_NR} 1
 		else
 			sleep .5
 		fi
 		RETRIES="$((RETRIES - 1))"
 	done
 	if [ "${RETRIES}" -eq "0" ]; then
+		gpio_set ${BT_PWR_GPIO_NR} 0
 		echo "${SCRIPTNAME}: FAILED (hciattach)"
 		exit
 	fi
 	if hciconfig hci0 up; then
 		:	# No-op
 	else
+		gpio_set ${BT_PWR_GPIO_NR} 0
 		echo "${SCRIPTNAME}: FAILED"
 		exit
 	fi

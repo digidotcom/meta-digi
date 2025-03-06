@@ -26,6 +26,11 @@ SRC_URI = " \
     ${FW_QCA6564-WIFI} \
 "
 
+SRC_URI_append_mxs = " \
+    file://bdwlan30_lp_US.bin \
+    file://bdwlan30_lp_World.bin \
+"
+
 S = "${WORKDIR}"
 
 do_install() {
