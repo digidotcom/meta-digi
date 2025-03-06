@@ -33,7 +33,7 @@ MANIFEST_URL="ssh://git@stash.digi.com/dey/digi-yocto-sdk-manifest.git"
 
 DIGI_PREMIRROR_CFG="
 # Use internal mirror
-SOURCE_MIRROR_URL ?= \"http://build-linux.digi.com/yocto/downloads/\"
+SOURCE_MIRROR_URL = \"http://log-sln-jenkins.digi.com/yocto/downloads/\"
 INHERIT += \"own-mirrors\"
 "
 
@@ -64,12 +64,16 @@ copy_images() {
 	else
 		cp -r tmp/deploy/images ${1}/
 	fi
-	# Jenkins artifact archiver does not copy symlinks, so remove them
-	# beforehand to avoid ending up with several duplicates of the same
-	# files.
-	if [ -d "${1}/images" ]; then
-		find ${1}/images -type l -delete
-	fi
+
+	# Images directory post-processing
+	#  - Jenkins artifact archiver does not copy symlinks, so remove them
+	#    beforehand to avoid ending up with several duplicates of the same
+	#    files.
+	#  - Remove 'README_-_DO_NOT_DELETE_FILES_IN_THIS_DIRECTORY.txt' files
+	#  - Create MD5SUMS file
+	find ${1} -type l -delete
+	find ${1} -type f -name 'README_-_DO_NOT_DELETE*' -delete
+	find ${1} -type f -not -name MD5SUMS -print0 | xargs -r -0 md5sum | sed -e "s,${1}/,,g" | sort -k2,2 > ${1}/MD5SUMS
 }
 
 #
@@ -140,7 +144,8 @@ if pushd ${YOCTO_INST_DIR}; then
 		fi
 	fi
 	yes "" 2>/dev/null | ${REPO} init --no-repo-verify -u ${MANIFEST_URL} ${repo_revision}
-	time ${REPO} sync ${MAKE_JOBS}
+	${REPO} forall -p -c 'git remote prune $(git remote)'
+	time ${REPO} sync -d ${MAKE_JOBS}
 	popd
 fi
 

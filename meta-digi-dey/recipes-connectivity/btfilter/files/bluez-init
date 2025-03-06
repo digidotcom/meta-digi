@@ -27,7 +27,7 @@ ccardimx28js_bt_init() {
 	#
 	# Exit if this hardware does not support Bluetooth
 	#
-	BLUE_TOOTH_VARIANTS="0x02 0x03 0x10 0x11"
+	BLUE_TOOTH_VARIANTS="0x02 0x03 0x10 0x11 0x12"
 	MOD_VARIANT="$(cat /proc/device-tree/digi,hwid,variant 2>/dev/null || \
 		       cat /sys/kernel/ccardimx28/mod_variant)"
 	if ! echo ${BLUE_TOOTH_VARIANTS} | grep -qs ${MOD_VARIANT}; then
