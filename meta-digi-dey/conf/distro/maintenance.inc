@@ -1,6 +1,9 @@
 # Use new NXP package mirror
 FSL_MIRROR = "https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/"
 
+# Use GNU mirror instead of main server for GNU packages
+GNU_MIRROR = "https://ftpmirror.gnu.org/gnu"
+
 SRC_URI_prepend_pn-hostapd = "https://w1.fi/releases/hostapd-2.4.tar.gz "
 SRC_URI_remove_pn-hostapd = "http://hostap.epitest.fi/releases/hostapd-2.4.tar.gz"
 SRC_URI_prepend_pn-python-m2crypto = "https://pypi.python.org/packages/source/M/M2Crypto/M2Crypto-0.21.1.tar.gz "
